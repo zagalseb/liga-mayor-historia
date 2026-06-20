@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <Base title="Inicio">
   <div class="hero">
@@ -8,12 +9,12 @@ import Base from '../layouts/Base.astro';
   </div>
 
   <div class="cards">
-    <a href="/equipos" class="card">
+    <a href={`${B}equipos`} class="card">
       <span class="card-icon">🏈</span>
       <span class="card-title">Equipos</span>
       <span class="card-desc">Explora los equipos de Liga Mayor</span>
     </a>
-    <a href="/temporadas" class="card">
+    <a href={`${B}temporadas`} class="card">
       <span class="card-icon">📅</span>
       <span class="card-title">Temporadas</span>
       <span class="card-desc">Resultados, standings y campeones por año</span>

@@ -1,15 +1,17 @@
 ---
 import Base from '../../layouts/Base.astro';
 import teams from '../../data/teams.json';
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
 ---
 <Base title="Equipos">
   <h1>Equipos</h1>
   <div class="grid">
     {teams.map((team) => (
-      <a href={`/equipos/${team.id}`} class="card">
+      <a href={`${B}equipos/${team.id}`} class="card">
         {team.logo_url && (
           <div class="logo-wrap">
-            <img src={team.logo_url} alt={`Logo ${team.nombre_corto}`} />
+            <img src={withBase(team.logo_url)} alt={`Logo ${team.nombre_corto}`} />
           </div>
         )}
         <strong>{team.nombre_corto}</strong>

@@ -3,6 +3,7 @@ interface Props {
   title: string;
 }
 const { title } = Astro.props;
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <!doctype html>
 <html lang="es">
@@ -22,9 +23,9 @@ const { title } = Astro.props;
   </head>
   <body>
     <nav>
-      <a href="/">Liga Mayor Wiki</a>
-      <a href="/equipos">Equipos</a>
-      <a href="/temporadas">Temporadas</a>
+      <a href={B}>Inicio</a>
+      <a href={`${B}equipos`}>Equipos</a>
+      <a href={`${B}temporadas`}>Temporadas</a>
     </nav>
     <main>
       <slot />

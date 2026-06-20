@@ -4,6 +4,8 @@ import teams from '../../../data/teams.json';
 import { calcStandings } from '../../../utils/standings';
 import { allSeasons, seasonSlug } from '../../../utils/seasons';
 import type { SeasonData } from '../../../utils/seasons';
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
 
 export function getStaticPaths() {
   const paths = [];
@@ -70,15 +72,15 @@ const isChampion = finalGame
 
 <Base title={`${team.nombre_corto} ${conferencia} ${year}`}>
   <p style="margin-bottom: 0.5rem;">
-    <a href="/equipos">← Equipos</a>
+    <a href={`${B}equipos`}>← Equipos</a>
     {' / '}
-    <a href={`/equipos/${id}`}>{team.nombre_corto}</a>
+    <a href={`${B}equipos/${id}`}>{team.nombre_corto}</a>
   </p>
 
   <div class="team-header">
     {team.logo_url && (
       <div class="logo-wrap">
-        <img src={team.logo_url} alt={`Logo ${team.nombre_corto}`} />
+        <img src={withBase(team.logo_url)} alt={`Logo ${team.nombre_corto}`} />
       </div>
     )}
     <div>
@@ -133,7 +135,7 @@ const isChampion = finalGame
             <tr class={won(g) ? 'win' : 'loss'}>
               <td class="center">{g.jornada}</td>
               <td>
-                <a href={`/equipos/${isHome(g) ? g.away_team_id : g.home_team_id}/${slug}`}>
+                <a href={`${B}equipos/${isHome(g) ? g.away_team_id : g.home_team_id}/${slug}`}>
                   {rivalName(g)}
                 </a>
               </td>
@@ -170,7 +172,7 @@ const isChampion = finalGame
               <tr class={won(g) ? 'win' : 'loss'}>
                 <td>{tipoLabel[g.tipo] ?? g.tipo}</td>
                 <td>
-                  <a href={`/equipos/${isHome(g) ? g.away_team_id : g.home_team_id}/${slug}`}>
+                  <a href={`${B}equipos/${isHome(g) ? g.away_team_id : g.home_team_id}/${slug}`}>
                     {rivalName(g)}
                   </a>
                 </td>

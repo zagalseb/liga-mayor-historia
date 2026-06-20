@@ -2,6 +2,8 @@
 import Base from '../../../layouts/Base.astro';
 import teams from '../../../data/teams.json';
 import { allSeasons, getAllGames, seasonSlug } from '../../../utils/seasons';
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
 
 export function getStaticPaths() {
   return teams.map((team) => ({
@@ -63,12 +65,12 @@ const teamSeasons = allSeasons
 ---
 
 <Base title={team.nombre_corto}>
-  <p style="margin-bottom: 0.5rem;"><a href="/equipos">← Equipos</a></p>
+  <p style="margin-bottom: 0.5rem;"><a href={`${B}equipos`}>← Equipos</a></p>
 
   <div class="team-header">
     {team.logo_url && (
       <div class="logo-wrap">
-        <img src={team.logo_url} alt={`Logo ${team.nombre_corto}`} />
+        <img src={withBase(team.logo_url)} alt={`Logo ${team.nombre_corto}`} />
       </div>
     )}
     <div>
@@ -116,7 +118,7 @@ const teamSeasons = allSeasons
       <ul class="season-list">
         {teamSeasons.map((ts) => (
           <li>
-            <a href={`/equipos/${id}/${ts.slug}`}>{ts.conferencia} {ts.year}</a>
+            <a href={`${B}equipos/${id}/${ts.slug}`}>{ts.conferencia} {ts.year}</a>
           </li>
         ))}
       </ul>

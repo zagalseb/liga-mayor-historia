@@ -3,10 +3,15 @@ import Base from '../../layouts/Base.astro';
 import teams from '../../data/teams.json';
 import { allSeasons, seasonSlug } from '../../utils/seasons';
 
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
+
 const teamName = (id: string) =>
   teams.find((t) => t.id === id)?.nombre_corto ?? id;
-const teamLogo = (id: string) =>
-  teams.find((t) => t.id === id)?.logo_url ?? null;
+const teamLogo = (id: string) => {
+  const url = teams.find((t) => t.id === id)?.logo_url ?? null;
+  return url ? withBase(url) : null;
+};
 
 const seasons = allSeasons.map((s) => {
   const final = s.games.find((g) => g.tipo === 'final');
@@ -25,7 +30,7 @@ const seasons = allSeasons.map((s) => {
   <ul class="season-list">
     {seasons.map((s) => (
       <li>
-        <a href={`/temporadas/${s.slug}`}>
+        <a href={`${B}temporadas/${s.slug}`}>
           <span class="year">{s.year}</span>
           <span class="meta">{s.liga} · {s.conferencia}</span>
           {s.champion && (

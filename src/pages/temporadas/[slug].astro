@@ -23,11 +23,16 @@ const standingsPorGrupo = grupos ? calcStandingsPorGrupo(games, grupos) : null;
 const standings = grupos ? [] : calcStandings(games);
 const clasificadosSet = new Set(clasificados_playoffs ?? []);
 
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
+
 const teamName = (id: string) =>
   teams.find((t) => t.id === id)?.nombre_corto ?? id;
 
-const teamLogo = (id: string) =>
-  teams.find((t) => t.id === id)?.logo_url ?? null;
+const teamLogo = (id: string) => {
+  const url = teams.find((t) => t.id === id)?.logo_url ?? null;
+  return url ? withBase(url) : null;
+};
 
 const playoffs = {
   cuartos: games.filter((g) => g.tipo === 'playoffs_cuartos'),
@@ -105,7 +110,7 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
                     )}
                   </td>
                   <td>
-                    <a href={`/equipos/${row.team_id}`}>{teamName(row.team_id)}</a>
+                    <a href={`${B}equipos/${row.team_id}`}>{teamName(row.team_id)}</a>
                   </td>
                   <td class="center">{row.pj}</td>
                   <td class="center">{row.g}</td>
@@ -154,7 +159,7 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
                   )}
                 </td>
                 <td>
-                  <a href={`/equipos/${row.team_id}`}>{teamName(row.team_id)}</a>
+                  <a href={`${B}equipos/${row.team_id}`}>{teamName(row.team_id)}</a>
                 </td>
                 <td class="center">{row.pj}</td>
                 <td class="center">{row.g}</td>
@@ -186,11 +191,11 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
         <div class="jornada-body">
           {jGames.map((g) => (
             <div class="match-row">
-              <a href={`/equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
+              <a href={`${B}equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
               <span class="ml">{teamLogo(g.home_team_id) ? <img src={teamLogo(g.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
               <span class="ms mono">{g.home_score} – {g.away_score}</span>
               <span class="ml">{teamLogo(g.away_team_id) ? <img src={teamLogo(g.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
-              <a href={`/equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
+              <a href={`${B}equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
               <span class="match-lugar">{g.lugar}</span>
             </div>
           ))}
@@ -207,11 +212,11 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
       <div class="games-list">
         {playoffs.cuartos.map((g) => (
           <div class="match-row playoff-match">
-            <a href={`/equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
+            <a href={`${B}equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
             <span class="ml">{teamLogo(g.home_team_id) ? <img src={teamLogo(g.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
             <span class="ms mono">{g.home_score} – {g.away_score}</span>
             <span class="ml">{teamLogo(g.away_team_id) ? <img src={teamLogo(g.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
-            <a href={`/equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
+            <a href={`${B}equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
             <span class="match-lugar">{g.lugar}</span>
           </div>
         ))}
@@ -225,11 +230,11 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
       <div class="games-list">
         {playoffs.semi.map((g) => (
           <div class="match-row playoff-match">
-            <a href={`/equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
+            <a href={`${B}equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
             <span class="ml">{teamLogo(g.home_team_id) ? <img src={teamLogo(g.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
             <span class="ms mono">{g.home_score} – {g.away_score}</span>
             <span class="ml">{teamLogo(g.away_team_id) ? <img src={teamLogo(g.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
-            <a href={`/equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
+            <a href={`${B}equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
             <span class="match-lugar">{g.lugar}</span>
           </div>
         ))}
