@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+import teams from '../../data/teams.json';
+import { allSeasons, seasonSlug } from '../../utils/seasons';
+
+const teamName = (id: string) =>
+  teams.find((t) => t.id === id)?.nombre_corto ?? id;
+const teamLogo = (id: string) =>
+  teams.find((t) => t.id === id)?.logo_url ?? null;
+
+const seasons = allSeasons.map((s) => {
+  const final = s.games.find((g) => g.tipo === 'final');
+  const champion = final
+    ? final.home_score > final.away_score
+      ? final.home_team_id
+      : final.away_team_id
+    : null;
+  return { ...s, slug: seasonSlug(s), champion };
+});
+---
+
+<Base title="Temporadas">
+  <h1>Temporadas</h1>
+
+  <ul class="season-list">
+    {seasons.map((s) => (
+      <li>
+        <a href={`/temporadas/${s.slug}`}>
+          <span class="year">{s.year}</span>
+          <span class="meta">{s.liga} · {s.conferencia}</span>
+          {s.champion && (
+            <span class="champion">
+              🏆
+              {teamLogo(s.champion)
+                ? <img src={teamLogo(s.champion)!} alt={teamName(s.champion)} class="champ-logo" />
+                : teamName(s.champion)
+              }
+            </span>
+          )}
+        </a>
+      </li>
+    ))}
+  </ul>
+</Base>
+
+<style>
+  h1 { margin-bottom: 1.5rem; }
+
+  .season-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  .season-list li { border: 1px solid #ddd; border-radius: 6px; background: #fff; }
+  .season-list a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .season-list a:hover { background: #f5f7ff; }
+
+  .year { font-size: 1.2rem; font-weight: 700; min-width: 3rem; }
+  .meta { color: #555; font-size: 0.9rem; flex: 1; }
+  .champion { display: flex; align-items: center; gap: 0.35rem; white-space: nowrap; }
+  .champ-logo { width: 36px; height: 36px; object-fit: contain; display: block; }
+</style>

@@ -1,0 +1,33 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} — Liga Mayor Wiki</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: system-ui, sans-serif; color: #1a1a1a; background: #f9f9f9; line-height: 1.5; }
+      nav { background: #1a1a2e; color: #fff; padding: 0.75rem 1.5rem; }
+      nav a { color: #fff; text-decoration: none; font-weight: 600; margin-right: 1.5rem; }
+      nav a:hover { text-decoration: underline; }
+      main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+      h1 { font-size: 1.75rem; margin-bottom: 1.5rem; }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Liga Mayor Wiki</a>
+      <a href="/equipos">Equipos</a>
+      <a href="/temporadas">Temporadas</a>
+    </nav>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

@@ -1,0 +1,415 @@
+---
+import Base from '../../layouts/Base.astro';
+import teams from '../../data/teams.json';
+import { calcStandings, calcStandingsPorGrupo } from '../../utils/standings';
+import { allSeasons, seasonSlug } from '../../utils/seasons';
+import type { SeasonData } from '../../utils/seasons';
+
+export function getStaticPaths() {
+  return allSeasons.map((season) => ({
+    params: { slug: seasonSlug(season) },
+    props: { season },
+  }));
+}
+
+interface Props {
+  season: SeasonData;
+}
+const { season } = Astro.props;
+const { year, liga, conferencia, games, grupos, clasificados_playoffs } = season;
+const slug = seasonSlug(season);
+
+const standingsPorGrupo = grupos ? calcStandingsPorGrupo(games, grupos) : null;
+const standings = grupos ? [] : calcStandings(games);
+const clasificadosSet = new Set(clasificados_playoffs ?? []);
+
+const teamName = (id: string) =>
+  teams.find((t) => t.id === id)?.nombre_corto ?? id;
+
+const teamLogo = (id: string) =>
+  teams.find((t) => t.id === id)?.logo_url ?? null;
+
+const playoffs = {
+  cuartos: games.filter((g) => g.tipo === 'playoffs_cuartos'),
+  semi: games.filter((g) => g.tipo === 'playoffs_semi'),
+  final: games.find((g) => g.tipo === 'final'),
+};
+
+const champion = playoffs.final
+  ? playoffs.final.home_score > playoffs.final.away_score
+    ? playoffs.final.home_team_id
+    : playoffs.final.away_team_id
+  : null;
+
+const jornadas = [
+  ...new Set(
+    games
+      .filter((g) => g.tipo === 'regular' && g.jornada !== null)
+      .map((g) => g.jornada!)
+  ),
+]
+  .sort((a, b) => a - b)
+  .map((j) => ({
+    num: j,
+    games: games.filter((g) => g.tipo === 'regular' && g.jornada === j),
+  }));
+
+const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
+---
+
+<Base title={`Temporada ${conferencia} ${year}`}>
+  <h1>Temporada {conferencia} {year}</h1>
+  <p class="subtitle">{conferencia}</p>
+
+  {champion && (
+    <div class="champion-banner">
+      <span class="champ-label">Campeón {conferencia} {year}</span>
+      <span class="champ-team">
+        {teamLogo(champion) && (
+          <img src={teamLogo(champion)!} alt="" class="champ-logo" />
+        )}
+        <strong>{teamName(champion)}</strong>
+      </span>
+    </div>
+  )}
+
+  <h2>Tabla general — Temporada regular</h2>
+
+  {standingsPorGrupo ? (
+    Object.entries(standingsPorGrupo).map(([nombre, rows]) => (
+      <>
+        <h3 class="grupo-title">Grupo {nombre}</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th></th>
+                <th class="left">Equipo</th>
+                <th>PJ</th>
+                <th>G</th>
+                <th>P</th>
+                <th>%</th>
+                <th>PF</th>
+                <th>PC</th>
+                <th>DIF</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => (
+                <tr class={clasificadosSet.has(row.team_id) ? 'playoff' : ''}>
+                  <td class="center muted">{i + 1}</td>
+                  <td class="logo-cell">
+                    {teamLogo(row.team_id) && (
+                      <img src={teamLogo(row.team_id)!} alt="" class="team-logo" />
+                    )}
+                  </td>
+                  <td>
+                    <a href={`/equipos/${row.team_id}`}>{teamName(row.team_id)}</a>
+                  </td>
+                  <td class="center">{row.pj}</td>
+                  <td class="center">{row.g}</td>
+                  <td class="center">{row.p}</td>
+                  <td class="center mono">{fmtPct(row.pct)}</td>
+                  <td class="center">{row.pf}</td>
+                  <td class="center">{row.pc}</td>
+                  <td class={`center mono ${row.dif > 0 ? 'pos' : row.dif < 0 ? 'neg' : ''}`}>
+                    {row.dif > 0 ? '+' : ''}{row.dif}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="legend">
+          <span class="leg-playoff"></span> Clasificado a Playoffs
+        </p>
+      </>
+    ))
+  ) : (
+    <>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th></th>
+              <th class="left">Equipo</th>
+              <th>PJ</th>
+              <th>G</th>
+              <th>P</th>
+              <th>%</th>
+              <th>PF</th>
+              <th>PC</th>
+              <th>DIF</th>
+            </tr>
+          </thead>
+          <tbody>
+            {standings.map((row, i) => (
+              <tr class={i < 8 ? 'playoff' : i === standings.length - 1 ? 'descenso' : ''}>
+                <td class="center muted">{i + 1}</td>
+                <td class="logo-cell">
+                  {teamLogo(row.team_id) && (
+                    <img src={teamLogo(row.team_id)!} alt="" class="team-logo" />
+                  )}
+                </td>
+                <td>
+                  <a href={`/equipos/${row.team_id}`}>{teamName(row.team_id)}</a>
+                </td>
+                <td class="center">{row.pj}</td>
+                <td class="center">{row.g}</td>
+                <td class="center">{row.p}</td>
+                <td class="center mono">{fmtPct(row.pct)}</td>
+                <td class="center">{row.pf}</td>
+                <td class="center">{row.pc}</td>
+                <td class={`center mono ${row.dif > 0 ? 'pos' : row.dif < 0 ? 'neg' : ''}`}>
+                  {row.dif > 0 ? '+' : ''}{row.dif}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="legend">
+        <span class="leg-playoff"></span> Clasificado a Playoffs (1–8)
+        &nbsp;&nbsp;
+        <span class="leg-descenso"></span> Desciende de división ({standings.length})
+      </p>
+    </>
+  )}
+
+  <h2>Temporada regular — Partido por partido</h2>
+  <div class="jornadas">
+    {jornadas.map(({ num, games: jGames }) => (
+      <details>
+        <summary>Semana {num}</summary>
+        <div class="jornada-body">
+          {jGames.map((g) => (
+            <div class="match-row">
+              <a href={`/equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
+              <span class="ml">{teamLogo(g.home_team_id) ? <img src={teamLogo(g.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+              <span class="ms mono">{g.home_score} – {g.away_score}</span>
+              <span class="ml">{teamLogo(g.away_team_id) ? <img src={teamLogo(g.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+              <a href={`/equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
+              <span class="match-lugar">{g.lugar}</span>
+            </div>
+          ))}
+        </div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Playoffs</h2>
+
+  {playoffs.cuartos.length > 0 && (
+    <>
+      <h3>Cuartos de Final</h3>
+      <div class="games-list">
+        {playoffs.cuartos.map((g) => (
+          <div class="match-row playoff-match">
+            <a href={`/equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
+            <span class="ml">{teamLogo(g.home_team_id) ? <img src={teamLogo(g.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+            <span class="ms mono">{g.home_score} – {g.away_score}</span>
+            <span class="ml">{teamLogo(g.away_team_id) ? <img src={teamLogo(g.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+            <a href={`/equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
+            <span class="match-lugar">{g.lugar}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+
+  {playoffs.semi.length > 0 && (
+    <>
+      <h3>Semifinal</h3>
+      <div class="games-list">
+        {playoffs.semi.map((g) => (
+          <div class="match-row playoff-match">
+            <a href={`/equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
+            <span class="ml">{teamLogo(g.home_team_id) ? <img src={teamLogo(g.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+            <span class="ms mono">{g.home_score} – {g.away_score}</span>
+            <span class="ml">{teamLogo(g.away_team_id) ? <img src={teamLogo(g.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+            <a href={`/equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
+            <span class="match-lugar">{g.lugar}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+
+  {playoffs.final && (
+    <>
+      <h3>Final</h3>
+      <div class="games-list">
+        <div class="match-row playoff-match final-match">
+          <a href={`/equipos/${playoffs.final.home_team_id}/${year}`} class={`mn mn-home ${playoffs.final.home_score > playoffs.final.away_score ? 'winner' : ''}`}>{teamName(playoffs.final.home_team_id)}</a>
+          <span class="ml">{teamLogo(playoffs.final.home_team_id) ? <img src={teamLogo(playoffs.final.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <span class="ms mono">{playoffs.final.home_score} – {playoffs.final.away_score}</span>
+          <span class="ml">{teamLogo(playoffs.final.away_team_id) ? <img src={teamLogo(playoffs.final.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <a href={`/equipos/${playoffs.final.away_team_id}/${year}`} class={`mn mn-away ${playoffs.final.away_score > playoffs.final.home_score ? 'winner' : ''}`}>{teamName(playoffs.final.away_team_id)}</a>
+          <span class="match-lugar">{playoffs.final.lugar}</span>
+        </div>
+      </div>
+    </>
+  )}
+</Base>
+
+<style>
+  h2 { margin: 2rem 0 0.75rem; font-size: 1.2rem; border-bottom: 2px solid #1a1a2e; padding-bottom: 0.25rem; }
+  h3 { margin: 1.25rem 0 0.5rem; font-size: 1rem; color: #444; }
+  .grupo-title { font-size: 1.05rem; color: #1a1a2e; font-weight: 700; margin-top: 1.5rem; }
+  .subtitle { color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 1.5rem; }
+
+  .champion-banner {
+    margin-bottom: 2rem;
+    padding: 1rem 1.5rem;
+    background: #fff;
+    border: 2px solid #1a1a2e;
+    color: #1a1a1a;
+    border-radius: 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .champ-label { font-size: 1rem; color: #1a1a2e; font-weight: 600; }
+  .champ-team {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .champ-team strong { font-size: 1.3rem; color: #1a1a1a; }
+  .champ-logo { width: 44px; height: 44px; object-fit: contain; display: block; }
+
+  /* standings table */
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+  th { background: #1a1a2e; color: #fff; padding: 0.5rem 0.75rem; font-weight: 600; }
+  td { padding: 0.4rem 0.75rem; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f0f4ff; }
+  tr.playoff td:first-child { border-left: 3px solid #1a1a2e; }
+  tr.descenso td:first-child { border-left: 3px solid #c00; }
+  tr.descenso td { color: #c00; }
+  .logo-cell { width: 40px; padding: 0.2rem 0.4rem; text-align: center; }
+  .team-logo { width: 32px; height: 32px; object-fit: contain; display: block; margin: 0 auto; }
+  .left { text-align: left; }
+  .center { text-align: center; }
+  .mono { font-variant-numeric: tabular-nums; }
+  .muted { color: #999; }
+  .pos { color: #1a7a1a; }
+  .neg { color: #a00; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .legend {
+    font-size: 0.78rem; color: #666; margin-top: 0.6rem;
+    display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap;
+  }
+  .leg-playoff, .leg-descenso {
+    display: inline-block; width: 3px; height: 1rem; border-radius: 1px; vertical-align: middle;
+  }
+  .leg-playoff { background: #1a1a2e; }
+  .leg-descenso { background: #c00; }
+
+  /* jornada accordions */
+  .jornadas { display: flex; flex-direction: column; gap: 0.35rem; }
+  details {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    overflow: hidden;
+  }
+  summary {
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    user-select: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: '▶';
+    font-size: 0.65rem;
+    color: #888;
+    transition: transform 0.15s;
+    display: inline-block;
+  }
+  details[open] summary::before { transform: rotate(90deg); }
+  details[open] summary { border-bottom: 1px solid #eee; }
+  summary:hover { background: #f5f7ff; }
+
+  .jornada-body { padding: 0.25rem 0; }
+
+  /* shared match row */
+  .games-list { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .match-row {
+    display: grid;
+    grid-template-columns: 1fr 32px 72px 32px 1fr 160px;
+    align-items: center;
+    gap: 0 0.4rem;
+    padding: 0.45rem 1rem;
+    font-size: 0.88rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .match-row:last-child { border-bottom: none; }
+
+  .playoff-match {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+  }
+  .final-match { border-color: #1a1a2e; }
+
+  .mn {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.88rem;
+    min-width: 0;
+  }
+  .mn:hover { text-decoration: underline; }
+  .mn.winner { font-weight: 700; }
+  .mn-home { text-align: right; }
+  .mn-away { text-align: left; }
+
+  .ml {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+  }
+  .match-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+  }
+  .ml-ph { display: block; width: 28px; height: 28px; }
+
+  .ms {
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.92rem;
+    white-space: nowrap;
+  }
+
+  .match-lugar {
+    color: #888;
+    font-size: 0.75rem;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 0.5rem;
+  }
+</style>

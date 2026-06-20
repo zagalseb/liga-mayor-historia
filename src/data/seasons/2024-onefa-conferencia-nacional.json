@@ -1,0 +1,578 @@
+{
+  "season": 2024,
+  "liga": "ONEFA",
+  "conferencia": "Conferencia Nacional",
+  "division": 2,
+  "grupo": null,
+  "grupos": {
+    "Norte": ["zorros_cetys", "potros_itson", "indios_uacj", "cimarrones_uabc", "correcaminos_uat"],
+    "Bajío": ["tecos_uag", "borregos_qro", "anahuac_qro", "lobos_uadec", "cardinals_uiw", "lobos_ulm", "redwolves_qro"],
+    "Centro": ["anahuac_cun", "buhos_ipn", "potros_uaem", "frailes_ut", "toros_chapingo", "panteras_21", "halcones_uv"]
+  },
+  "clasificados_playoffs": [
+    "anahuac_qro", "borregos_qro", "zorros_cetys", "potros_uaem",
+    "buhos_ipn", "lobos_uadec", "anahuac_cun", "potros_itson"
+  ],
+  "games": [
+    {
+      "id": "j0-redwolves_qro-cardinals_uiw",
+      "jornada": 0, "tipo": "regular", "fecha": null,
+      "home_team_id": "redwolves_qro", "away_team_id": "cardinals_uiw",
+      "home_score": 27, "away_score": 35,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j0-borregos_qro-potros_uaem",
+      "jornada": 0, "tipo": "regular", "fecha": null,
+      "home_team_id": "borregos_qro", "away_team_id": "potros_uaem",
+      "home_score": 14, "away_score": 19,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j0-tecos_uag-anahuac_cun",
+      "jornada": 0, "tipo": "regular", "fecha": null,
+      "home_team_id": "tecos_uag", "away_team_id": "anahuac_cun",
+      "home_score": 0, "away_score": 21,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j1-potros_itson-anahuac_qro",
+      "jornada": 1, "tipo": "regular", "fecha": null,
+      "home_team_id": "potros_itson", "away_team_id": "anahuac_qro",
+      "home_score": 27, "away_score": 21,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j1-potros_uaem-panteras_21",
+      "jornada": 1, "tipo": "regular", "fecha": null,
+      "home_team_id": "potros_uaem", "away_team_id": "panteras_21",
+      "home_score": 34, "away_score": 8,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j1-zorros_cetys-lobos_uadec",
+      "jornada": 1, "tipo": "regular", "fecha": null,
+      "home_team_id": "zorros_cetys", "away_team_id": "lobos_uadec",
+      "home_score": 59, "away_score": 14,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j1-cimarrones_uabc-cardinals_uiw",
+      "jornada": 1, "tipo": "regular", "fecha": null,
+      "home_team_id": "cimarrones_uabc", "away_team_id": "cardinals_uiw",
+      "home_score": 49, "away_score": 32,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j1-buhos_ipn-frailes_ut",
+      "jornada": 1, "tipo": "regular", "fecha": null,
+      "home_team_id": "buhos_ipn", "away_team_id": "frailes_ut",
+      "home_score": 30, "away_score": 29,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j1-correcaminos_uat-lobos_ulm",
+      "jornada": 1, "tipo": "regular", "fecha": null,
+      "home_team_id": "correcaminos_uat", "away_team_id": "lobos_ulm",
+      "home_score": 7, "away_score": 13,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j1-indios_uacj-redwolves_qro",
+      "jornada": 1, "tipo": "regular", "fecha": null,
+      "home_team_id": "indios_uacj", "away_team_id": "redwolves_qro",
+      "home_score": 7, "away_score": 26,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j1-anahuac_cun-halcones_uv",
+      "jornada": 1, "tipo": "regular", "fecha": null,
+      "home_team_id": "anahuac_cun", "away_team_id": "halcones_uv",
+      "home_score": 41, "away_score": 7,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-potros_itson-correcaminos_uat",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "potros_itson", "away_team_id": "correcaminos_uat",
+      "home_score": 33, "away_score": 0,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-redwolves_qro-halcones_uv",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "redwolves_qro", "away_team_id": "halcones_uv",
+      "home_score": 15, "away_score": 28,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-lobos_uadec-buhos_ipn",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "lobos_uadec", "away_team_id": "buhos_ipn",
+      "home_score": 35, "away_score": 25,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-potros_uaem-tecos_uag",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "potros_uaem", "away_team_id": "tecos_uag",
+      "home_score": 19, "away_score": 15,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-cardinals_uiw-toros_chapingo",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "cardinals_uiw", "away_team_id": "toros_chapingo",
+      "home_score": 7, "away_score": 19,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-lobos_ulm-panteras_21",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "lobos_ulm", "away_team_id": "panteras_21",
+      "home_score": 10, "away_score": 28,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-indios_uacj-cimarrones_uabc",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "indios_uacj", "away_team_id": "cimarrones_uabc",
+      "home_score": 28, "away_score": 27,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-anahuac_qro-frailes_ut",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "anahuac_qro", "away_team_id": "frailes_ut",
+      "home_score": 14, "away_score": 3,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j2-anahuac_cun-borregos_qro",
+      "jornada": 2, "tipo": "regular", "fecha": null,
+      "home_team_id": "anahuac_cun", "away_team_id": "borregos_qro",
+      "home_score": 28, "away_score": 7,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j3-potros_itson-indios_uacj",
+      "jornada": 3, "tipo": "regular", "fecha": null,
+      "home_team_id": "potros_itson", "away_team_id": "indios_uacj",
+      "home_score": 40, "away_score": 0,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j3-cimarrones_uabc-zorros_cetys",
+      "jornada": 3, "tipo": "regular", "fecha": null,
+      "home_team_id": "cimarrones_uabc", "away_team_id": "zorros_cetys",
+      "home_score": 7, "away_score": 62,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j3-frailes_ut-toros_chapingo",
+      "jornada": 3, "tipo": "regular", "fecha": null,
+      "home_team_id": "frailes_ut", "away_team_id": "toros_chapingo",
+      "home_score": 23, "away_score": 9,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j3-lobos_ulm-anahuac_qro",
+      "jornada": 3, "tipo": "regular", "fecha": null,
+      "home_team_id": "lobos_ulm", "away_team_id": "anahuac_qro",
+      "home_score": 14, "away_score": 27,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j3-panteras_21-buhos_ipn",
+      "jornada": 3, "tipo": "regular", "fecha": null,
+      "home_team_id": "panteras_21", "away_team_id": "buhos_ipn",
+      "home_score": 14, "away_score": 39,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j3-halcones_uv-potros_uaem",
+      "jornada": 3, "tipo": "regular", "fecha": null,
+      "home_team_id": "halcones_uv", "away_team_id": "potros_uaem",
+      "home_score": 0, "away_score": 31,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j3-tecos_uag-borregos_qro",
+      "jornada": 3, "tipo": "regular", "fecha": null,
+      "home_team_id": "tecos_uag", "away_team_id": "borregos_qro",
+      "home_score": 14, "away_score": 21,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j4-anahuac_qro-redwolves_qro",
+      "jornada": 4, "tipo": "regular", "fecha": null,
+      "home_team_id": "anahuac_qro", "away_team_id": "redwolves_qro",
+      "home_score": 28, "away_score": 6,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j4-lobos_uadec-lobos_ulm",
+      "jornada": 4, "tipo": "regular", "fecha": null,
+      "home_team_id": "lobos_uadec", "away_team_id": "lobos_ulm",
+      "home_score": 41, "away_score": 7,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j4-cimarrones_uabc-potros_itson",
+      "jornada": 4, "tipo": "regular", "fecha": null,
+      "home_team_id": "cimarrones_uabc", "away_team_id": "potros_itson",
+      "home_score": 6, "away_score": 30,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j4-correcaminos_uat-zorros_cetys",
+      "jornada": 4, "tipo": "regular", "fecha": null,
+      "home_team_id": "correcaminos_uat", "away_team_id": "zorros_cetys",
+      "home_score": 0, "away_score": 47,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j4-halcones_uv-buhos_ipn",
+      "jornada": 4, "tipo": "regular", "fecha": null,
+      "home_team_id": "halcones_uv", "away_team_id": "buhos_ipn",
+      "home_score": 7, "away_score": 28,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j4-potros_uaem-frailes_ut",
+      "jornada": 4, "tipo": "regular", "fecha": null,
+      "home_team_id": "potros_uaem", "away_team_id": "frailes_ut",
+      "home_score": 33, "away_score": 17,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j4-tecos_uag-cardinals_uiw",
+      "jornada": 4, "tipo": "regular", "fecha": null,
+      "home_team_id": "tecos_uag", "away_team_id": "cardinals_uiw",
+      "home_score": 36, "away_score": 20,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j4-anahuac_cun-toros_chapingo",
+      "jornada": 4, "tipo": "regular", "fecha": null,
+      "home_team_id": "anahuac_cun", "away_team_id": "toros_chapingo",
+      "home_score": 51, "away_score": 15,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j5-zorros_cetys-potros_itson",
+      "jornada": 5, "tipo": "regular", "fecha": null,
+      "home_team_id": "zorros_cetys", "away_team_id": "potros_itson",
+      "home_score": 42, "away_score": 35,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j5-toros_chapingo-halcones_uv",
+      "jornada": 5, "tipo": "regular", "fecha": null,
+      "home_team_id": "toros_chapingo", "away_team_id": "halcones_uv",
+      "home_score": 30, "away_score": 32,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j5-potros_uaem-anahuac_cun",
+      "jornada": 5, "tipo": "regular", "fecha": null,
+      "home_team_id": "potros_uaem", "away_team_id": "anahuac_cun",
+      "home_score": 14, "away_score": 19,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j5-redwolves_qro-lobos_uadec",
+      "jornada": 5, "tipo": "regular", "fecha": null,
+      "home_team_id": "redwolves_qro", "away_team_id": "lobos_uadec",
+      "home_score": 7, "away_score": 37,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j5-anahuac_qro-tecos_uag",
+      "jornada": 5, "tipo": "regular", "fecha": null,
+      "home_team_id": "anahuac_qro", "away_team_id": "tecos_uag",
+      "home_score": 28, "away_score": 12,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j5-correcaminos_uat-indios_uacj",
+      "jornada": 5, "tipo": "regular", "fecha": null,
+      "home_team_id": "correcaminos_uat", "away_team_id": "indios_uacj",
+      "home_score": 7, "away_score": 26,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j5-panteras_21-frailes_ut",
+      "jornada": 5, "tipo": "regular", "fecha": null,
+      "home_team_id": "panteras_21", "away_team_id": "frailes_ut",
+      "home_score": 7, "away_score": 14,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j5-borregos_qro-cardinals_uiw",
+      "jornada": 5, "tipo": "regular", "fecha": null,
+      "home_team_id": "borregos_qro", "away_team_id": "cardinals_uiw",
+      "home_score": 21, "away_score": 25,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j6-cimarrones_uabc-correcaminos_uat",
+      "jornada": 6, "tipo": "regular", "fecha": null,
+      "home_team_id": "cimarrones_uabc", "away_team_id": "correcaminos_uat",
+      "home_score": 21, "away_score": 0,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j6-frailes_ut-anahuac_cun",
+      "jornada": 6, "tipo": "regular", "fecha": null,
+      "home_team_id": "frailes_ut", "away_team_id": "anahuac_cun",
+      "home_score": 14, "away_score": 7,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j6-cardinals_uiw-anahuac_qro",
+      "jornada": 6, "tipo": "regular", "fecha": null,
+      "home_team_id": "cardinals_uiw", "away_team_id": "anahuac_qro",
+      "home_score": 0, "away_score": 30,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j6-buhos_ipn-potros_uaem",
+      "jornada": 6, "tipo": "regular", "fecha": null,
+      "home_team_id": "buhos_ipn", "away_team_id": "potros_uaem",
+      "home_score": 29, "away_score": 22,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j6-borregos_qro-lobos_uadec",
+      "jornada": 6, "tipo": "regular", "fecha": null,
+      "home_team_id": "borregos_qro", "away_team_id": "lobos_uadec",
+      "home_score": 17, "away_score": 7,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j6-panteras_21-toros_chapingo",
+      "jornada": 6, "tipo": "regular", "fecha": null,
+      "home_team_id": "panteras_21", "away_team_id": "toros_chapingo",
+      "home_score": 6, "away_score": 17,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j6-tecos_uag-lobos_ulm",
+      "jornada": 6, "tipo": "regular", "fecha": null,
+      "home_team_id": "tecos_uag", "away_team_id": "lobos_ulm",
+      "home_score": 29, "away_score": 0,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j6-indios_uacj-zorros_cetys",
+      "jornada": 6, "tipo": "regular", "fecha": null,
+      "home_team_id": "indios_uacj", "away_team_id": "zorros_cetys",
+      "home_score": 21, "away_score": 28,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j7-buhos_ipn-zorros_cetys",
+      "jornada": 7, "tipo": "regular", "fecha": null,
+      "home_team_id": "buhos_ipn", "away_team_id": "zorros_cetys",
+      "home_score": 20, "away_score": 28,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j7-toros_chapingo-indios_uacj",
+      "jornada": 7, "tipo": "regular", "fecha": null,
+      "home_team_id": "toros_chapingo", "away_team_id": "indios_uacj",
+      "home_score": 7, "away_score": 28,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j7-frailes_ut-potros_itson",
+      "jornada": 7, "tipo": "regular", "fecha": null,
+      "home_team_id": "frailes_ut", "away_team_id": "potros_itson",
+      "home_score": 20, "away_score": 22,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j7-lobos_ulm-redwolves_qro",
+      "jornada": 7, "tipo": "regular", "fecha": null,
+      "home_team_id": "lobos_ulm", "away_team_id": "redwolves_qro",
+      "home_score": 16, "away_score": 13,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j7-lobos_uadec-tecos_uag",
+      "jornada": 7, "tipo": "regular", "fecha": null,
+      "home_team_id": "lobos_uadec", "away_team_id": "tecos_uag",
+      "home_score": 32, "away_score": 26,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j7-panteras_21-cimarrones_uabc",
+      "jornada": 7, "tipo": "regular", "fecha": null,
+      "home_team_id": "panteras_21", "away_team_id": "cimarrones_uabc",
+      "home_score": 0, "away_score": 34,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j7-anahuac_qro-borregos_qro",
+      "jornada": 7, "tipo": "regular", "fecha": null,
+      "home_team_id": "anahuac_qro", "away_team_id": "borregos_qro",
+      "home_score": 17, "away_score": 13,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j7-halcones_uv-correcaminos_uat",
+      "jornada": 7, "tipo": "regular", "fecha": null,
+      "home_team_id": "halcones_uv", "away_team_id": "correcaminos_uat",
+      "home_score": 28, "away_score": 6,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j8-zorros_cetys-cimarrones_uabc",
+      "jornada": 8, "tipo": "regular", "fecha": null,
+      "home_team_id": "zorros_cetys", "away_team_id": "cimarrones_uabc",
+      "home_score": 28, "away_score": 24,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j8-toros_chapingo-buhos_ipn",
+      "jornada": 8, "tipo": "regular", "fecha": null,
+      "home_team_id": "toros_chapingo", "away_team_id": "buhos_ipn",
+      "home_score": 0, "away_score": 29,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j8-frailes_ut-halcones_uv",
+      "jornada": 8, "tipo": "regular", "fecha": null,
+      "home_team_id": "frailes_ut", "away_team_id": "halcones_uv",
+      "home_score": 17, "away_score": 12,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j8-redwolves_qro-tecos_uag",
+      "jornada": 8, "tipo": "regular", "fecha": null,
+      "home_team_id": "redwolves_qro", "away_team_id": "tecos_uag",
+      "home_score": 6, "away_score": 27,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j8-cardinals_uiw-lobos_uadec",
+      "jornada": 8, "tipo": "regular", "fecha": null,
+      "home_team_id": "cardinals_uiw", "away_team_id": "lobos_uadec",
+      "home_score": 7, "away_score": 27,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j8-lobos_ulm-borregos_qro",
+      "jornada": 8, "tipo": "regular", "fecha": null,
+      "home_team_id": "lobos_ulm", "away_team_id": "borregos_qro",
+      "home_score": 0, "away_score": 27,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j8-indios_uacj-potros_itson",
+      "jornada": 8, "tipo": "regular", "fecha": null,
+      "home_team_id": "indios_uacj", "away_team_id": "potros_itson",
+      "home_score": 6, "away_score": 28,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j8-anahuac_cun-panteras_21",
+      "jornada": 8, "tipo": "regular", "fecha": null,
+      "home_team_id": "anahuac_cun", "away_team_id": "panteras_21",
+      "home_score": 40, "away_score": 6,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j9-buhos_ipn-anahuac_cun",
+      "jornada": 9, "tipo": "regular", "fecha": null,
+      "home_team_id": "buhos_ipn", "away_team_id": "anahuac_cun",
+      "home_score": 28, "away_score": 21,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j9-toros_chapingo-potros_uaem",
+      "jornada": 9, "tipo": "regular", "fecha": null,
+      "home_team_id": "toros_chapingo", "away_team_id": "potros_uaem",
+      "home_score": 14, "away_score": 27,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j9-cardinals_uiw-lobos_ulm",
+      "jornada": 9, "tipo": "regular", "fecha": null,
+      "home_team_id": "cardinals_uiw", "away_team_id": "lobos_ulm",
+      "home_score": 14, "away_score": 7,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j9-lobos_uadec-anahuac_qro",
+      "jornada": 9, "tipo": "regular", "fecha": null,
+      "home_team_id": "lobos_uadec", "away_team_id": "anahuac_qro",
+      "home_score": 24, "away_score": 30,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j9-borregos_qro-redwolves_qro",
+      "jornada": 9, "tipo": "regular", "fecha": null,
+      "home_team_id": "borregos_qro", "away_team_id": "redwolves_qro",
+      "home_score": 42, "away_score": 0,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "j9-halcones_uv-panteras_21",
+      "jornada": 9, "tipo": "regular", "fecha": null,
+      "home_team_id": "halcones_uv", "away_team_id": "panteras_21",
+      "home_score": 36, "away_score": 12,
+      "lugar": null, "neutral": false, "cuenta_standing": true
+    },
+    {
+      "id": "cf-anahuac_qro-borregos_qro",
+      "jornada": null, "tipo": "playoffs_cuartos", "fecha": null,
+      "home_team_id": "anahuac_qro", "away_team_id": "borregos_qro",
+      "home_score": 14, "away_score": 21,
+      "lugar": null, "neutral": false, "cuenta_standing": false
+    },
+    {
+      "id": "cf-zorros_cetys-potros_uaem",
+      "jornada": null, "tipo": "playoffs_cuartos", "fecha": null,
+      "home_team_id": "zorros_cetys", "away_team_id": "potros_uaem",
+      "home_score": 42, "away_score": 20,
+      "lugar": null, "neutral": false, "cuenta_standing": false
+    },
+    {
+      "id": "cf-buhos_ipn-lobos_uadec",
+      "jornada": null, "tipo": "playoffs_cuartos", "fecha": null,
+      "home_team_id": "buhos_ipn", "away_team_id": "lobos_uadec",
+      "home_score": 28, "away_score": 20,
+      "lugar": null, "neutral": false, "cuenta_standing": false
+    },
+    {
+      "id": "cf-anahuac_cun-potros_itson",
+      "jornada": null, "tipo": "playoffs_cuartos", "fecha": null,
+      "home_team_id": "anahuac_cun", "away_team_id": "potros_itson",
+      "home_score": 19, "away_score": 14,
+      "lugar": null, "neutral": false, "cuenta_standing": false
+    },
+    {
+      "id": "sf-buhos_ipn-anahuac_cun",
+      "jornada": null, "tipo": "playoffs_semi", "fecha": null,
+      "home_team_id": "buhos_ipn", "away_team_id": "anahuac_cun",
+      "home_score": 28, "away_score": 34,
+      "lugar": null, "neutral": false, "cuenta_standing": false
+    },
+    {
+      "id": "sf-zorros_cetys-borregos_qro",
+      "jornada": null, "tipo": "playoffs_semi", "fecha": null,
+      "home_team_id": "zorros_cetys", "away_team_id": "borregos_qro",
+      "home_score": 28, "away_score": 19,
+      "lugar": null, "neutral": false, "cuenta_standing": false
+    },
+    {
+      "id": "final-zorros_cetys-anahuac_cun",
+      "jornada": null, "tipo": "final", "fecha": null,
+      "home_team_id": "zorros_cetys", "away_team_id": "anahuac_cun",
+      "home_score": 24, "away_score": 20,
+      "lugar": null, "neutral": false, "cuenta_standing": false
+    }
+  ]
+}

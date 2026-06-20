@@ -1,0 +1,168 @@
+---
+import Base from '../../../layouts/Base.astro';
+import teams from '../../../data/teams.json';
+import { allSeasons, getAllGames, seasonSlug } from '../../../utils/seasons';
+
+export function getStaticPaths() {
+  return teams.map((team) => ({
+    params: { id: team.id },
+    props: { team },
+  }));
+}
+
+interface Props {
+  team: typeof teams[number];
+}
+const { team } = Astro.props;
+const id = team.id;
+
+// Récord histórico total (temporada regular + playoffs)
+const allGames = getAllGames().filter(
+  (g) => g.home_team_id === id || g.away_team_id === id
+);
+const historicalStanding = allGames.length === 0 ? null : allGames.reduce(
+  (acc, g) => {
+    const home = g.home_team_id === id;
+    const myScore = home ? g.home_score : g.away_score;
+    const theirScore = home ? g.away_score : g.home_score;
+    const win = myScore > theirScore;
+    return {
+      pj: acc.pj + 1,
+      g: acc.g + (win ? 1 : 0),
+      p: acc.p + (win ? 0 : 1),
+      pf: acc.pf + myScore,
+      pc: acc.pc + theirScore,
+      get pct() { return this.pj > 0 ? this.g / this.pj : 0; },
+      get dif() { return this.pf - this.pc; },
+    };
+  },
+  { pj: 0, g: 0, p: 0, pf: 0, pc: 0, get pct() { return 0; }, get dif() { return 0; } }
+);
+
+const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
+
+// Campeonatos: finales ganadas
+const championships = allSeasons
+  .filter(({ games }) => {
+    const final = games.find((g) => g.tipo === 'final');
+    if (!final) return false;
+    return (
+      (final.home_team_id === id && final.home_score > final.away_score) ||
+      (final.away_team_id === id && final.away_score > final.home_score)
+    );
+  })
+  .map((s) => ({ year: s.year, conferencia: s.conferencia }));
+
+// Temporadas donde este equipo jugó al menos un partido
+const teamSeasons = allSeasons
+  .filter(({ games }) =>
+    games.some((g) => g.home_team_id === id || g.away_team_id === id)
+  )
+  .map((s) => ({ year: s.year, slug: seasonSlug(s), conferencia: s.conferencia }))
+  .sort((a, b) => b.year - a.year);
+---
+
+<Base title={team.nombre_corto}>
+  <p style="margin-bottom: 0.5rem;"><a href="/equipos">← Equipos</a></p>
+
+  <div class="team-header">
+    {team.logo_url && (
+      <div class="logo-wrap">
+        <img src={team.logo_url} alt={`Logo ${team.nombre_corto}`} />
+      </div>
+    )}
+    <div>
+      <h1>{team.nombre_oficial}</h1>
+      <dl class="meta">
+        <dt>Universidad</dt><dd>{team.universidad}</dd>
+        <dt>Ciudad</dt><dd>{team.ciudad}, {team.estado}</dd>
+      </dl>
+    </div>
+  </div>
+
+  {historicalStanding && (
+    <section>
+      <h2>Récord histórico</h2>
+      <div class="record-bar">
+        <div class="stat"><span class="val">{historicalStanding.pj}</span><span class="lbl">PJ</span></div>
+        <div class="stat"><span class="val">{historicalStanding.g}</span><span class="lbl">G</span></div>
+        <div class="stat"><span class="val">{historicalStanding.p}</span><span class="lbl">P</span></div>
+        <div class="stat"><span class="val mono">{fmtPct(historicalStanding.pct)}</span><span class="lbl">PCT</span></div>
+        <div class="stat"><span class="val">{historicalStanding.pf}</span><span class="lbl">PF</span></div>
+        <div class="stat"><span class="val">{historicalStanding.pc}</span><span class="lbl">PC</span></div>
+        <div class={`stat ${historicalStanding.dif > 0 ? 'pos' : historicalStanding.dif < 0 ? 'neg' : ''}`}>
+          <span class="val">{historicalStanding.dif > 0 ? '+' : ''}{historicalStanding.dif}</span>
+          <span class="lbl">DIF</span>
+        </div>
+      </div>
+      <p class="note">Temporada regular + Playoffs · {teamSeasons.length} temporada{teamSeasons.length !== 1 ? 's' : ''} registrada{teamSeasons.length !== 1 ? 's' : ''}</p>
+    </section>
+  )}
+
+  {championships.length > 0 && (
+    <section>
+      <h2>Campeonatos</h2>
+      <ul class="championships">
+        {championships.map((c) => <li>🏆 Campeón {c.conferencia} {c.year}</li>)}
+      </ul>
+    </section>
+  )}
+
+  <section>
+    <h2>Temporadas</h2>
+    {teamSeasons.length === 0 ? (
+      <p class="muted">Sin datos de temporadas.</p>
+    ) : (
+      <ul class="season-list">
+        {teamSeasons.map((ts) => (
+          <li>
+            <a href={`/equipos/${id}/${ts.slug}`}>{ts.conferencia} {ts.year}</a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Base>
+
+<style>
+  h2 { margin: 2rem 0 0.75rem; font-size: 1.1rem; border-bottom: 2px solid #1a1a2e; padding-bottom: 0.25rem; }
+  .team-header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 0.5rem; }
+  .logo-wrap {
+    width: 120px; height: 120px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-wrap img { max-width: 120px; max-height: 120px; width: auto; height: auto; object-fit: contain; }
+  dl.meta { margin-top: 0.5rem; display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; }
+  dt { font-weight: 600; color: #555; }
+
+  .record-bar { display: flex; gap: 0; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; width: fit-content; margin-top: 0.5rem; }
+  .stat { display: flex; flex-direction: column; align-items: center; padding: 0.6rem 1.1rem; border-right: 1px solid #eee; background: #fff; }
+  .stat:last-child { border-right: none; }
+  .val { font-size: 1.3rem; font-weight: 700; line-height: 1; }
+  .lbl { font-size: 0.7rem; color: #888; margin-top: 0.2rem; text-transform: uppercase; }
+  .stat.pos .val { color: #1a7a1a; }
+  .stat.neg .val { color: #a00; }
+  .mono { font-variant-numeric: tabular-nums; }
+  .note { font-size: 0.75rem; color: #888; margin-top: 0.4rem; }
+
+  .championships { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .championships li {
+    background: #1a1a2e; color: #fff;
+    padding: 0.4rem 1rem; border-radius: 4px; font-weight: 600; font-size: 0.9rem;
+  }
+
+  .season-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+  .season-list li {
+    border: 1px solid #ddd; border-radius: 4px; background: #fff;
+  }
+  .season-list a {
+    display: block; padding: 0.55rem 1rem;
+    color: inherit; text-decoration: none; font-weight: 600;
+  }
+  .season-list a:hover { background: #f5f7ff; text-decoration: underline; }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .muted { color: #888; font-size: 0.9rem; }
+</style>

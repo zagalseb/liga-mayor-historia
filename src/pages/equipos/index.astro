@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+import teams from '../../data/teams.json';
+---
+<Base title="Equipos">
+  <h1>Equipos</h1>
+  <div class="grid">
+    {teams.map((team) => (
+      <a href={`/equipos/${team.id}`} class="card">
+        {team.logo_url && (
+          <div class="logo-wrap">
+            <img src={team.logo_url} alt={`Logo ${team.nombre_corto}`} />
+          </div>
+        )}
+        <strong>{team.nombre_corto}</strong>
+        <span class="uni">{team.universidad}</span>
+        <span class="loc">{team.ciudad}, {team.estado}</span>
+      </a>
+    ))}
+  </div>
+</Base>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 1.25rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .card:hover {
+    border-color: #1a1a2e;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .logo-wrap {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+  }
+  .logo-wrap img {
+    max-width: 100%;
+    max-height: 140px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+  .card strong { font-size: 0.95rem; }
+  .uni { font-size: 0.75rem; color: #555; }
+  .loc { font-size: 0.75rem; color: #888; }
+</style>

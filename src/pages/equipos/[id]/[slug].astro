@@ -1,0 +1,238 @@
+---
+import Base from '../../../layouts/Base.astro';
+import teams from '../../../data/teams.json';
+import { calcStandings } from '../../../utils/standings';
+import { allSeasons, seasonSlug } from '../../../utils/seasons';
+import type { SeasonData } from '../../../utils/seasons';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const team of teams) {
+    for (const season of allSeasons) {
+      const hasGames = season.games.some(
+        (g) => g.home_team_id === team.id || g.away_team_id === team.id
+      );
+      if (hasGames) {
+        paths.push({
+          params: { id: team.id, slug: seasonSlug(season) },
+          props: { team, season },
+        });
+      }
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  team: typeof teams[number];
+  season: SeasonData;
+}
+const { team, season } = Astro.props;
+const id = team.id;
+const { year, conferencia, games: seasonGames } = season;
+
+const standing = calcStandings(seasonGames).find((s) => s.team_id === id);
+
+const myGames = (tipos: string[]) =>
+  seasonGames
+    .filter((g) => tipos.includes(g.tipo) && (g.home_team_id === id || g.away_team_id === id))
+    .sort((a, b) => (a.jornada ?? 99) - (b.jornada ?? 99) || (a.fecha ?? '').localeCompare(b.fecha ?? ''));
+
+const regularGames = myGames(['regular']);
+const playoffs = myGames(['playoffs_cuartos', 'playoffs_semi', 'final']);
+
+const slug = seasonSlug(season);
+
+const rivalName = (g: typeof seasonGames[number]) => {
+  const rivalId = g.home_team_id === id ? g.away_team_id : g.home_team_id;
+  return teams.find((t) => t.id === rivalId)?.nombre_corto ?? rivalId;
+};
+
+const isHome = (g: typeof seasonGames[number]) => g.home_team_id === id;
+const myScore = (g: typeof seasonGames[number]) => isHome(g) ? g.home_score : g.away_score;
+const rivalScore = (g: typeof seasonGames[number]) => isHome(g) ? g.away_score : g.home_score;
+const won = (g: typeof seasonGames[number]) => myScore(g) > rivalScore(g);
+
+const tipoLabel: Record<string, string> = {
+  playoffs_cuartos: 'Cuartos',
+  playoffs_semi: 'Semifinal',
+  final: 'Final',
+};
+
+const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
+
+const finalGame = seasonGames.find((g) => g.tipo === 'final');
+const isChampion = finalGame
+  ? (finalGame.home_team_id === id && finalGame.home_score > finalGame.away_score) ||
+    (finalGame.away_team_id === id && finalGame.away_score > finalGame.home_score)
+  : false;
+---
+
+<Base title={`${team.nombre_corto} ${conferencia} ${year}`}>
+  <p style="margin-bottom: 0.5rem;">
+    <a href="/equipos">← Equipos</a>
+    {' / '}
+    <a href={`/equipos/${id}`}>{team.nombre_corto}</a>
+  </p>
+
+  <div class="team-header">
+    {team.logo_url && (
+      <div class="logo-wrap">
+        <img src={team.logo_url} alt={`Logo ${team.nombre_corto}`} />
+      </div>
+    )}
+    <div>
+      <h1>{team.nombre_oficial} <span class="year-badge">{conferencia} {year}</span></h1>
+      <dl class="meta">
+        <dt>Universidad</dt><dd>{team.universidad}</dd>
+        <dt>Ciudad</dt><dd>{team.ciudad}, {team.estado}</dd>
+      </dl>
+    </div>
+  </div>
+
+  {isChampion && (
+    <div class="champion-banner">
+      🏆 Campeón {conferencia} {year}
+    </div>
+  )}
+
+  {standing && (
+    <section>
+      <h2>Récord {year} — Temporada regular</h2>
+      <div class="record-bar">
+        <div class="stat"><span class="val">{standing.pj}</span><span class="lbl">PJ</span></div>
+        <div class="stat"><span class="val">{standing.g}</span><span class="lbl">G</span></div>
+        <div class="stat"><span class="val">{standing.p}</span><span class="lbl">P</span></div>
+        <div class="stat"><span class="val mono">{fmtPct(standing.pct)}</span><span class="lbl">PCT</span></div>
+        <div class="stat"><span class="val">{standing.pf}</span><span class="lbl">PF</span></div>
+        <div class="stat"><span class="val">{standing.pc}</span><span class="lbl">PC</span></div>
+        <div class={`stat ${standing.dif > 0 ? 'pos' : standing.dif < 0 ? 'neg' : ''}`}>
+          <span class="val">{standing.dif > 0 ? '+' : ''}{standing.dif}</span>
+          <span class="lbl">DIF</span>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section>
+    <h2>Temporada regular {year}</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>J</th>
+            <th class="left">Rival</th>
+            <th>Sede</th>
+            <th>Res.</th>
+            <th>Marcador</th>
+            <th class="left">Lugar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {regularGames.map((g) => (
+            <tr class={won(g) ? 'win' : 'loss'}>
+              <td class="center">{g.jornada}</td>
+              <td>
+                <a href={`/equipos/${isHome(g) ? g.away_team_id : g.home_team_id}/${slug}`}>
+                  {rivalName(g)}
+                </a>
+              </td>
+              <td class="center">{isHome(g) ? 'L' : 'V'}</td>
+              <td class={`center fw ${won(g) ? 'green' : 'red'}`}>{won(g) ? 'G' : 'P'}</td>
+              <td class="center mono">{myScore(g)}–{rivalScore(g)}</td>
+              <td class="lugar">{g.lugar}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Playoffs {year}</h2>
+    {playoffs.length === 0 ? (
+      <p class="muted">No clasificó a Playoffs.</p>
+    ) : (
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="left">Ronda</th>
+              <th class="left">Rival</th>
+              <th>Sede</th>
+              <th>Res.</th>
+              <th>Marcador</th>
+              <th class="left">Lugar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {playoffs.map((g) => (
+              <tr class={won(g) ? 'win' : 'loss'}>
+                <td>{tipoLabel[g.tipo] ?? g.tipo}</td>
+                <td>
+                  <a href={`/equipos/${isHome(g) ? g.away_team_id : g.home_team_id}/${slug}`}>
+                    {rivalName(g)}
+                  </a>
+                </td>
+                <td class="center">{isHome(g) ? 'L' : 'V'}</td>
+                <td class={`center fw ${won(g) ? 'green' : 'red'}`}>{won(g) ? 'G' : 'P'}</td>
+                <td class="center mono">{myScore(g)}–{rivalScore(g)}</td>
+                <td class="lugar">{g.lugar}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </section>
+</Base>
+
+<style>
+  h2 { margin: 2rem 0 0.75rem; font-size: 1.1rem; border-bottom: 2px solid #1a1a2e; padding-bottom: 0.25rem; }
+  .champion-banner {
+    margin: 1rem 0 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: #1a1a2e;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  .team-header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 0.5rem; }
+  .logo-wrap {
+    width: 120px; height: 120px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-wrap img { max-width: 120px; max-height: 120px; width: auto; height: auto; object-fit: contain; }
+  .year-badge { font-size: 0.9rem; color: #888; font-weight: 400; margin-left: 0.4rem; }
+  dl.meta { margin-top: 0.5rem; display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; }
+  dt { font-weight: 600; color: #555; }
+
+  .record-bar { display: flex; gap: 0; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; width: fit-content; margin-top: 0.5rem; }
+  .stat { display: flex; flex-direction: column; align-items: center; padding: 0.6rem 1.1rem; border-right: 1px solid #eee; background: #fff; }
+  .stat:last-child { border-right: none; }
+  .val { font-size: 1.3rem; font-weight: 700; line-height: 1; }
+  .lbl { font-size: 0.7rem; color: #888; margin-top: 0.2rem; text-transform: uppercase; }
+  .stat.pos .val { color: #1a7a1a; }
+  .stat.neg .val { color: #a00; }
+
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+  th { background: #1a1a2e; color: #fff; padding: 0.45rem 0.75rem; font-weight: 600; text-align: center; }
+  th.left { text-align: left; }
+  td { padding: 0.38rem 0.75rem; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f5f7ff; }
+  tr.win td:first-child { border-left: 3px solid #1a7a1a; }
+  tr.loss td:first-child { border-left: 3px solid #a00; }
+  .center { text-align: center; }
+  .mono { font-variant-numeric: tabular-nums; }
+  .fw { font-weight: 700; }
+  .green { color: #1a7a1a; }
+  .red { color: #a00; }
+  .lugar { color: #666; font-size: 0.8rem; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .muted { color: #888; font-size: 0.9rem; }
+</style>

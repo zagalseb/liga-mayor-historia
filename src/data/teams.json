@@ -1,0 +1,332 @@
+[
+  {
+    "id": "borregos_mty",
+    "nombre_oficial": "Borregos MTY",
+    "nombre_corto": "Borregos MTY",
+    "universidad": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+    "ciudad": "Monterrey",
+    "estado": "NL",
+    "logo_url": "/logos/borregos_mty.png",
+    "colores": ""
+  },
+  {
+    "id": "autenticos_uanl",
+    "nombre_oficial": "Auténticos Tigres UANL",
+    "nombre_corto": "Auténticos Tigres",
+    "universidad": "Universidad Autónoma de Nuevo León",
+    "ciudad": "San Nicolás de los Garza",
+    "estado": "NL",
+    "logo_url": "/logos/autenticos_uanl.png",
+    "colores": ""
+  },
+  {
+    "id": "pumas_cu",
+    "nombre_oficial": "Pumas CU",
+    "nombre_corto": "Pumas CU",
+    "universidad": "Universidad Nacional Autónoma de México",
+    "ciudad": "Ciudad Universitaria",
+    "estado": "CDMX",
+    "logo_url": "/logos/pumas_cu.png",
+    "colores": ""
+  },
+  {
+    "id": "pumas_aca",
+    "nombre_oficial": "Pumas Acatlán",
+    "nombre_corto": "Pumas Acatlán",
+    "universidad": "Universidad Nacional Autónoma de México",
+    "ciudad": "Naucalpan de Juárez",
+    "estado": "Estado de México",
+    "logo_url": "/logos/pumas_aca.png",
+    "colores": ""
+  },
+  {
+    "id": "aguilas_ipn",
+    "nombre_oficial": "Águilas Blancas IPN",
+    "nombre_corto": "Águilas Blancas",
+    "universidad": "Instituto Politécnico Nacional",
+    "ciudad": "Casco de Santo Tomás",
+    "estado": "CDMX",
+    "logo_url": "/logos/aguilas_ipn.png",
+    "colores": ""
+  },
+  {
+    "id": "burros_ipn",
+    "nombre_oficial": "Burros Blancos IPN",
+    "nombre_corto": "Burros Blancos",
+    "universidad": "Instituto Politécnico Nacional",
+    "ciudad": "Zacatenco",
+    "estado": "CDMX",
+    "logo_url": "/logos/burros_ipn.png",
+    "colores": ""
+  },
+  {
+    "id": "borregos_cem",
+    "nombre_oficial": "Borregos CEM",
+    "nombre_corto": "Borregos CEM",
+    "universidad": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+    "ciudad": "Lago de Guadalupe",
+    "estado": "Estado de México",
+    "logo_url": "/logos/borregos_cem.png",
+    "colores": ""
+  },
+  {
+    "id": "anahuac_mx",
+    "nombre_oficial": "Leones Anáhuac México",
+    "nombre_corto": "Leones Anáhuac",
+    "universidad": "Universidad Anáhuac México",
+    "ciudad": "Huixquilucan",
+    "estado": "Estado de México",
+    "logo_url": "/logos/anahuac_mx.png",
+    "colores": ""
+  },
+  {
+    "id": "borregos_gdl",
+    "nombre_oficial": "Borregos GDL",
+    "nombre_corto": "Borregos GDL",
+    "universidad": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+    "ciudad": "Guadalajara",
+    "estado": "Jalisco",
+    "logo_url": "/logos/borregos_gdl.png",
+    "colores": ""
+  },
+  {
+    "id": "borregos_pue",
+    "nombre_oficial": "Borregos PUE",
+    "nombre_corto": "Borregos PUE",
+    "universidad": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+    "ciudad": "Puebla",
+    "estado": "Puebla",
+    "logo_url": "/logos/borregos_pue.png",
+    "colores": ""
+  },
+  {
+    "id": "linces_uvm",
+    "nombre_oficial": "Linces UVM",
+    "nombre_corto": "Linces UVM",
+    "universidad": "Universidad del Valle de México",
+    "ciudad": "Naucalpan de Juárez",
+    "estado": "Estado de México",
+    "logo_url": "/logos/linces_uvm.png",
+    "colores": ""
+  },
+  {
+    "id": "borregos_ccm",
+    "nombre_oficial": "Borregos CCM",
+    "nombre_corto": "Borregos CCM",
+    "universidad": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+    "ciudad": "Tlalpan",
+    "estado": "CDMX",
+    "logo_url": "/logos/borregos_ccm.png",
+    "colores": ""
+  },
+  {
+    "id": "aztecas_udlap",
+    "nombre_oficial": "Aztecas UDLAP",
+    "nombre_corto": "Aztecas UDLAP",
+    "universidad": "Universidad de las Américas Puebla",
+    "ciudad": "San Andrés Cholula",
+    "estado": "Puebla",
+    "logo_url": "/logos/aztecas_udlap.png",
+    "colores": ""
+  },
+  {
+    "id": "zorros_cetys",
+    "nombre_oficial": "Zorros CETYS",
+    "nombre_corto": "Zorros CETYS",
+    "universidad": "Centro de Enseñanza Técnica y Superior",
+    "ciudad": "Mexicali",
+    "estado": "Baja California",
+    "logo_url": "/logos/zorros_cetys.png",
+    "colores": ""
+  },
+  {
+    "id": "aguilas_uach",
+    "nombre_oficial": "Águilas UACH",
+    "nombre_corto": "Águilas UACH",
+    "universidad": "Universidad Autónoma de Chihuahua",
+    "ciudad": "Chihuahua",
+    "estado": "Chihuahua",
+    "logo_url": "/logos/aguilas_uach.png",
+    "colores": null
+  },
+  {
+    "id": "tecos_uag",
+    "nombre_oficial": "Tecos UAG",
+    "nombre_corto": "Tecos UAG",
+    "universidad": "Universidad Autónoma de Guadalajara",
+    "ciudad": "Guadalajara",
+    "estado": "Jalisco",
+    "logo_url": "/logos/tecos_uag.png",
+    "colores": null
+  },
+  {
+    "id": "borregos_qro",
+    "nombre_oficial": "Borregos QRO",
+    "nombre_corto": "Borregos QRO",
+    "universidad": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+    "ciudad": "Querétaro",
+    "estado": "Querétaro",
+    "logo_url": "/logos/borregos_qro.png",
+    "colores": null
+  },
+  {
+    "id": "anahuac_qro",
+    "nombre_oficial": "Leones Anáhuac Querétaro",
+    "nombre_corto": "Anáhuac QRO",
+    "universidad": "Universidad Anáhuac Querétaro",
+    "ciudad": "Querétaro",
+    "estado": "Querétaro",
+    "logo_url": "/logos/anahuac_qro.png",
+    "colores": null
+  },
+  {
+    "id": "lobos_uadec",
+    "nombre_oficial": "Lobos UAdeC",
+    "nombre_corto": "Lobos UAdeC",
+    "universidad": "Universidad Autónoma de Coahuila",
+    "ciudad": "Saltillo",
+    "estado": "Coahuila",
+    "logo_url": "/logos/lobos_uadec.png",
+    "colores": null
+  },
+  {
+    "id": "cardinals_uiw",
+    "nombre_oficial": "Cardinals UIW",
+    "nombre_corto": "Cardinals UIW",
+    "universidad": "Universidad Incarnate Word Campus Bajío",
+    "ciudad": "Irapuato",
+    "estado": "Guanajuato",
+    "logo_url": "/logos/cardinals_uiw.png",
+    "colores": null
+  },
+  {
+    "id": "lobos_ulm",
+    "nombre_oficial": "Lobos ULM",
+    "nombre_corto": "Lobos ULM",
+    "universidad": "Universidad Latina de México",
+    "ciudad": "Celaya",
+    "estado": "Guanajuato",
+    "logo_url": "/logos/lobos_ulm.png",
+    "colores": null
+  },
+  {
+    "id": "redwolves_qro",
+    "nombre_oficial": "Red Wolves QRO",
+    "nombre_corto": "Red Wolves QRO",
+    "universidad": "Arkansas State University Campus Querétaro",
+    "ciudad": "Querétaro",
+    "estado": "Querétaro",
+    "logo_url": "/logos/redwolves_qro.png",
+    "colores": null
+  },
+  {
+    "id": "potros_itson",
+    "nombre_oficial": "Potros ITSON",
+    "nombre_corto": "Potros ITSON",
+    "universidad": "Instituto Tecnológico de Sonora",
+    "ciudad": "Ciudad Obregón",
+    "estado": "Sonora",
+    "logo_url": "/logos/potros_itson.png",
+    "colores": null
+  },
+  {
+    "id": "indios_uacj",
+    "nombre_oficial": "Indios UACJ",
+    "nombre_corto": "Indios UACJ",
+    "universidad": "Universidad Autónoma de Ciudad Juárez",
+    "ciudad": "Ciudad Juárez",
+    "estado": "Chihuahua",
+    "logo_url": "/logos/indios_uacj.png",
+    "colores": null
+  },
+  {
+    "id": "cimarrones_uabc",
+    "nombre_oficial": "Cimarrones UABC",
+    "nombre_corto": "Cimarrones UABC",
+    "universidad": "Universidad Autónoma de Baja California",
+    "ciudad": "Tijuana",
+    "estado": "Baja California",
+    "logo_url": "/logos/cimarrones_uabc.png",
+    "colores": null
+  },
+  {
+    "id": "correcaminos_uat",
+    "nombre_oficial": "Correcaminos UAT",
+    "nombre_corto": "Correcaminos UAT",
+    "universidad": "Universidad Autónoma de Tamaulipas",
+    "ciudad": "Ciudad Victoria",
+    "estado": "Tamaulipas",
+    "logo_url": "/logos/correcaminos_uat.png",
+    "colores": null
+  },
+  {
+    "id": "anahuac_cun",
+    "nombre_oficial": "Leones Anáhuac Cancún",
+    "nombre_corto": "Anáhuac Cancún",
+    "universidad": "Universidad Anáhuac Cancún",
+    "ciudad": "Cancún",
+    "estado": "Quintana Roo",
+    "logo_url": "/logos/anahuac_cun.png",
+    "colores": null
+  },
+  {
+    "id": "buhos_ipn",
+    "nombre_oficial": "Búhos Guinda IPN",
+    "nombre_corto": "Búhos Guinda",
+    "universidad": "Instituto Politécnico Nacional",
+    "ciudad": "Zacatenco",
+    "estado": "CDMX",
+    "logo_url": "/logos/buhos_ipn.png",
+    "colores": null
+  },
+  {
+    "id": "potros_uaem",
+    "nombre_oficial": "Potros Salvajes UAEM",
+    "nombre_corto": "Potros UAEM",
+    "universidad": "Universidad Autónoma del Estado De México",
+    "ciudad": "Toluca",
+    "estado": "Estado de México",
+    "logo_url": "/logos/potros_uaem.png",
+    "colores": null
+  },
+  {
+    "id": "frailes_ut",
+    "nombre_oficial": "Frailes del Tepeyac",
+    "nombre_corto": "Frailes Tepeyac",
+    "universidad": "Universidad del Tepeyac",
+    "ciudad": "Lindavista",
+    "estado": "CDMX",
+    "logo_url": "/logos/frailes_ut.png",
+    "colores": null
+  },
+  {
+    "id": "toros_chapingo",
+    "nombre_oficial": "Toros Salvajes CHAPINGO",
+    "nombre_corto": "Toros Chapingo",
+    "universidad": "Universidad Autónoma Chapingo",
+    "ciudad": "Texcoco",
+    "estado": "Estado de México",
+    "logo_url": "/logos/toros_chapingo.png",
+    "colores": null
+  },
+  {
+    "id": "panteras_21",
+    "nombre_oficial": "Panteras Siglo 21",
+    "nombre_corto": "Panteras GES 21",
+    "universidad": "Campus Universitario Siglo 21",
+    "ciudad": "Zinacantepec",
+    "estado": "Estado de México",
+    "logo_url": "/logos/panteras_21.png",
+    "colores": null
+  },
+  {
+    "id": "halcones_uv",
+    "nombre_oficial": "Halcones UV",
+    "nombre_corto": "Halcones UV",
+    "universidad": "Universidad Veracruzana",
+    "ciudad": "Xalapa",
+    "estado": "Veracruz",
+    "logo_url": "/logos/halcones_uv.png",
+    "colores": null
+  }
+]
