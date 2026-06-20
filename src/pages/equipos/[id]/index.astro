@@ -43,24 +43,63 @@ const historicalStanding = allGames.length === 0 ? null : allGames.reduce(
 
 const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
 
-// Campeonatos: finales ganadas
+const champLabel = (c: { division: number; year: number; liga: string; conferencia: string }) =>
+  c.division === 1 && c.year >= 2008 && c.year <= 2019
+    ? `Campeón ${c.liga} ${c.year}`
+    : `Campeón ${c.conferencia} ${c.year}`;
+
+const finalTypes = new Set(['final', 'final_independencia', 'final_libertad', 'final_revolucion_independencia', 'final_centro', 'final_norte']);
+
+// Campeonatos: finales ganadas (incluye variantes final_independencia / final_libertad)
 const championships = allSeasons
-  .filter(({ games }) => {
-    const final = games.find((g) => g.tipo === 'final');
-    if (!final) return false;
-    return (
-      (final.home_team_id === id && final.home_score > final.away_score) ||
-      (final.away_team_id === id && final.away_score > final.home_score)
+  .flatMap((s) => {
+    const finals = s.games.filter(
+      (g) => finalTypes.has(g.tipo) &&
+        ((g.home_team_id === id && g.home_score > g.away_score) ||
+         (g.away_team_id === id && g.away_score > g.home_score))
     );
-  })
-  .map((s) => ({ year: s.year, conferencia: s.conferencia }));
+    return finals.map((f) => {
+      let conferencia = s.conferencia;
+      let division = s.division;
+      if (s.divisiones) {
+        for (const [divKey, divInfo] of Object.entries(s.divisiones)) {
+          if (divInfo.equipos.includes(id)) {
+            conferencia = divInfo.conferencia;
+            division = parseInt(divKey, 10);
+            break;
+          }
+        }
+      } else if (f.tipo === 'final_norte' || f.tipo === 'final_revolucion_independencia') {
+        conferencia = `${s.conferencia} - Norte`;
+      } else if (f.tipo === 'final_centro') {
+        conferencia = `${s.conferencia} - Centro`;
+      }
+      return { year: s.year, liga: s.liga, conferencia, division };
+    });
+  });
 
 // Temporadas donde este equipo jugó al menos un partido
 const teamSeasons = allSeasons
   .filter(({ games }) =>
     games.some((g) => g.home_team_id === id || g.away_team_id === id)
   )
-  .map((s) => ({ year: s.year, slug: seasonSlug(s), conferencia: s.conferencia }))
+  .map((s) => {
+    let teamDiv = s.division;
+    let teamConf = s.conferencia;
+    if (s.divisiones) {
+      for (const [divKey, divInfo] of Object.entries(s.divisiones)) {
+        if (divInfo.equipos.includes(id)) {
+          teamDiv = parseInt(divKey, 10);
+          teamConf = divInfo.conferencia;
+          break;
+        }
+      }
+    }
+    const label = teamDiv === 1 && s.year >= 2008 && s.year <= 2019
+      ? `${s.liga} ${s.year}`
+      : `${teamConf} ${s.year}`;
+    return { year: s.year, slug: seasonSlug(s), label };
+  })
   .sort((a, b) => b.year - a.year);
 ---
 
@@ -105,7 +144,7 @@ const teamSeasons = allSeasons
     <section>
       <h2>Campeonatos</h2>
       <ul class="championships">
-        {championships.map((c) => <li>🏆 Campeón {c.conferencia} {c.year}</li>)}
+        {championships.map((c) => <li>🏆 {champLabel(c)}</li>)}
       </ul>
     </section>
   )}
@@ -118,7 +157,7 @@ const teamSeasons = allSeasons
       <ul class="season-list">
         {teamSeasons.map((ts) => (
           <li>
-            <a href={`${B}equipos/${id}/${ts.slug}`}>{ts.conferencia} {ts.year}</a>
+            <a href={`${B}equipos/${id}/${ts.slug}`}>{ts.label}</a>
           </li>
         ))}
       </ul>

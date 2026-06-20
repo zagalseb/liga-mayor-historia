@@ -13,14 +13,23 @@ const teamLogo = (id: string) => {
   return url ? withBase(url) : null;
 };
 
+const winnerOf = (g: { home_team_id: string; away_team_id: string; home_score: number; away_score: number } | undefined) =>
+  g ? (g.home_score > g.away_score ? g.home_team_id : g.away_team_id) : null;
+
 const seasons = allSeasons.map((s) => {
-  const final = s.games.find((g) => g.tipo === 'final');
-  const champion = final
-    ? final.home_score > final.away_score
-      ? final.home_team_id
-      : final.away_team_id
-    : null;
-  return { ...s, slug: seasonSlug(s), champion };
+  let champions: string[] = [];
+  const multiFinales = ['final_independencia', 'final_libertad', 'final_revolucion_independencia', 'final_centro', 'final_norte'];
+  const hasMulti = s.games.some((g) => multiFinales.includes(g.tipo));
+  if (s.divisiones || hasMulti) {
+    for (const tipo of multiFinales) {
+      const w = winnerOf(s.games.find((g) => g.tipo === tipo));
+      if (w) champions.push(w);
+    }
+  } else {
+    const w = winnerOf(s.games.find((g) => g.tipo === 'final'));
+    if (w) champions.push(w);
+  }
+  return { ...s, slug: seasonSlug(s), champions };
 });
 ---
 
@@ -33,13 +42,14 @@ const seasons = allSeasons.map((s) => {
         <a href={`${B}temporadas/${s.slug}`}>
           <span class="year">{s.year}</span>
           <span class="meta">{s.liga} · {s.conferencia}</span>
-          {s.champion && (
+          {s.champions.length > 0 && (
             <span class="champion">
               🏆
-              {teamLogo(s.champion)
-                ? <img src={teamLogo(s.champion)!} alt={teamName(s.champion)} class="champ-logo" />
-                : teamName(s.champion)
-              }
+              {s.champions.map((c) =>
+                teamLogo(c)
+                  ? <img src={teamLogo(c)!} alt={teamName(c)} class="champ-logo" />
+                  : <span>{teamName(c)}</span>
+              )}
             </span>
           )}
         </a>

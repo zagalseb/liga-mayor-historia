@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import teams from '../../data/teams.json';
-import { calcStandings, calcStandingsPorGrupo } from '../../utils/standings';
+import { calcStandings, calcStandingsPorGrupo, calcStandingsPorDivision } from '../../utils/standings';
 import { allSeasons, seasonSlug } from '../../utils/seasons';
 import type { SeasonData } from '../../utils/seasons';
 
@@ -16,12 +16,14 @@ interface Props {
   season: SeasonData;
 }
 const { season } = Astro.props;
-const { year, liga, conferencia, games, grupos, clasificados_playoffs } = season;
+const { year, liga, conferencia, games, grupos, divisiones, clasificados_playoffs, descenso } = season;
 const slug = seasonSlug(season);
 
 const standingsPorGrupo = grupos ? calcStandingsPorGrupo(games, grupos) : null;
-const standings = grupos ? [] : calcStandings(games);
+const standingsPorDivision = divisiones ? calcStandingsPorDivision(games, divisiones) : null;
+const standings = (grupos || divisiones) ? [] : calcStandings(games);
 const clasificadosSet = new Set(clasificados_playoffs ?? []);
+const descensoSet = new Set(descenso ?? []);
 
 const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
@@ -35,9 +37,15 @@ const teamLogo = (id: string) => {
 };
 
 const playoffs = {
+  wildcard: games.filter((g) => g.tipo === 'playoffs_wildcard'),
   cuartos: games.filter((g) => g.tipo === 'playoffs_cuartos'),
   semi: games.filter((g) => g.tipo === 'playoffs_semi'),
   final: games.find((g) => g.tipo === 'final'),
+  finalIndependencia: games.find((g) => g.tipo === 'final_independencia'),
+  finalLibertad: games.find((g) => g.tipo === 'final_libertad'),
+  finalRevolucionIndependencia: games.find((g) => g.tipo === 'final_revolucion_independencia'),
+  finalCentro: games.find((g) => g.tipo === 'final_centro'),
+  finalNorte: games.find((g) => g.tipo === 'final_norte'),
 };
 
 const champion = playoffs.final
@@ -45,6 +53,15 @@ const champion = playoffs.final
     ? playoffs.final.home_team_id
     : playoffs.final.away_team_id
   : null;
+
+const winnerOf = (g: typeof playoffs.final) =>
+  g ? (g.home_score > g.away_score ? g.home_team_id : g.away_team_id) : null;
+
+const championIndependencia = winnerOf(playoffs.finalIndependencia);
+const championLibertad = winnerOf(playoffs.finalLibertad);
+const championRevolucionIndependencia = winnerOf(playoffs.finalRevolucionIndependencia);
+const championCentro = winnerOf(playoffs.finalCentro);
+const championNorte = winnerOf(playoffs.finalNorte);
 
 const jornadas = [
   ...new Set(
@@ -60,15 +77,86 @@ const jornadas = [
   }));
 
 const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
+
+const championLabel =
+  season.division === 1 && year >= 2008 && year <= 2019
+    ? `Campeón ${liga} - ${conferencia} ${year}`
+    : `Campeón ${conferencia} ${year}`;
+
+const championIndependenciaLabel = divisiones
+  ? (season.division === 1 && year >= 2008 && year <= 2019
+      ? `Campeón ${liga} ${year}`
+      : `Campeón ${divisiones['1'].conferencia} ${year}`)
+  : '';
 ---
 
 <Base title={`Temporada ${conferencia} ${year}`}>
   <h1>Temporada {conferencia} {year}</h1>
   <p class="subtitle">{conferencia}</p>
 
-  {champion && (
+  {divisiones ? (
+    <div class="banners-row">
+      {championIndependencia && (
+        <div class="champion-banner">
+          <span class="champ-label">{championIndependenciaLabel}</span>
+          <span class="champ-team">
+            {teamLogo(championIndependencia) && (
+              <img src={teamLogo(championIndependencia)!} alt="" class="champ-logo" />
+            )}
+            <strong>{teamName(championIndependencia)}</strong>
+          </span>
+        </div>
+      )}
+      {championLibertad && (
+        <div class="champion-banner">
+          <span class="champ-label">Campeón {divisiones['2'].conferencia} {year}</span>
+          <span class="champ-team">
+            {teamLogo(championLibertad) && (
+              <img src={teamLogo(championLibertad)!} alt="" class="champ-logo" />
+            )}
+            <strong>{teamName(championLibertad)}</strong>
+          </span>
+        </div>
+      )}
+    </div>
+  ) : championNorte ? (
     <div class="champion-banner">
-      <span class="champ-label">Campeón {conferencia} {year}</span>
+      <span class="champ-label">Campeón {conferencia} - Norte {year}</span>
+      <span class="champ-team">
+        {teamLogo(championNorte) && (
+          <img src={teamLogo(championNorte)!} alt="" class="champ-logo" />
+        )}
+        <strong>{teamName(championNorte)}</strong>
+      </span>
+    </div>
+  ) : (championRevolucionIndependencia || championCentro) ? (
+    <div class="banners-row">
+      {championRevolucionIndependencia && (
+        <div class="champion-banner">
+          <span class="champ-label">Campeón {conferencia} - Norte {year}</span>
+          <span class="champ-team">
+            {teamLogo(championRevolucionIndependencia) && (
+              <img src={teamLogo(championRevolucionIndependencia)!} alt="" class="champ-logo" />
+            )}
+            <strong>{teamName(championRevolucionIndependencia)}</strong>
+          </span>
+        </div>
+      )}
+      {championCentro && (
+        <div class="champion-banner">
+          <span class="champ-label">Campeón {conferencia} - Centro {year}</span>
+          <span class="champ-team">
+            {teamLogo(championCentro) && (
+              <img src={teamLogo(championCentro)!} alt="" class="champ-logo" />
+            )}
+            <strong>{teamName(championCentro)}</strong>
+          </span>
+        </div>
+      )}
+    </div>
+  ) : champion ? (
+    <div class="champion-banner">
+      <span class="champ-label">{championLabel}</span>
       <span class="champ-team">
         {teamLogo(champion) && (
           <img src={teamLogo(champion)!} alt="" class="champ-logo" />
@@ -76,11 +164,63 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
         <strong>{teamName(champion)}</strong>
       </span>
     </div>
+  ) : games.length > 0 && !playoffs.final && !playoffs.finalNorte && !playoffs.finalRevolucionIndependencia && !playoffs.finalCentro && playoffs.wildcard.length === 0 && playoffs.cuartos.length === 0 && playoffs.semi.length === 0 && (
+    <div class="interrupted-banner">
+      Temporada interrumpida por pandemia — sin campeón
+    </div>
   )}
 
   <h2>Tabla general — Temporada regular</h2>
 
-  {standingsPorGrupo ? (
+  {standingsPorDivision ? (
+    Object.entries(standingsPorDivision).map(([divKey, rows]) => (
+      <>
+        <h3 class="grupo-title">{divisiones![divKey].conferencia}</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th></th>
+                <th class="left">Equipo</th>
+                <th>PJ</th>
+                <th>G</th>
+                <th>P</th>
+                <th>%</th>
+                <th>PF</th>
+                <th>PC</th>
+                <th>DIF</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => (
+                <tr>
+                  <td class="center muted">{i + 1}</td>
+                  <td class="logo-cell">
+                    {teamLogo(row.team_id) && (
+                      <img src={teamLogo(row.team_id)!} alt="" class="team-logo" />
+                    )}
+                  </td>
+                  <td>
+                    <a href={`${B}equipos/${row.team_id}`}>{teamName(row.team_id)}</a>
+                  </td>
+                  <td class="center">{row.pj}</td>
+                  <td class="center">{row.g}</td>
+                  <td class="center">{row.p}</td>
+                  <td class="center mono">{fmtPct(row.pct)}</td>
+                  <td class="center">{row.pf}</td>
+                  <td class="center">{row.pc}</td>
+                  <td class={`center mono ${row.dif > 0 ? 'pos' : row.dif < 0 ? 'neg' : ''}`}>
+                    {row.dif > 0 ? '+' : ''}{row.dif}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    ))
+  ) : standingsPorGrupo ? (
     Object.entries(standingsPorGrupo).map(([nombre, rows]) => (
       <>
         <h3 class="grupo-title">Grupo {nombre}</h3>
@@ -102,7 +242,7 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
             </thead>
             <tbody>
               {rows.map((row, i) => (
-                <tr class={clasificadosSet.has(row.team_id) ? 'playoff' : ''}>
+                <tr class={descensoSet.has(row.team_id) ? 'descenso' : clasificadosSet.has(row.team_id) ? 'playoff' : ''}>
                   <td class="center muted">{i + 1}</td>
                   <td class="logo-cell">
                     {teamLogo(row.team_id) && (
@@ -151,7 +291,7 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
           </thead>
           <tbody>
             {standings.map((row, i) => (
-              <tr class={i < 8 ? 'playoff' : i === standings.length - 1 ? 'descenso' : ''}>
+              <tr class={descensoSet.has(row.team_id) ? 'descenso' : clasificadosSet.size > 0 ? (clasificadosSet.has(row.team_id) ? 'playoff' : '') : (i < 8 ? 'playoff' : i === standings.length - 1 ? 'descenso' : '')}>
                 <td class="center muted">{i + 1}</td>
                 <td class="logo-cell">
                   {teamLogo(row.team_id) && (
@@ -206,6 +346,24 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
 
   <h2>Playoffs</h2>
 
+  {playoffs.wildcard.length > 0 && (
+    <>
+      <h3>Wild Card</h3>
+      <div class="games-list">
+        {playoffs.wildcard.map((g) => (
+          <div class="match-row playoff-match">
+            <a href={`${B}equipos/${g.home_team_id}/${slug}`} class={`mn mn-home ${g.home_score > g.away_score ? 'winner' : ''}`}>{teamName(g.home_team_id)}</a>
+            <span class="ml">{teamLogo(g.home_team_id) ? <img src={teamLogo(g.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+            <span class="ms mono">{g.home_score} – {g.away_score}</span>
+            <span class="ml">{teamLogo(g.away_team_id) ? <img src={teamLogo(g.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+            <a href={`${B}equipos/${g.away_team_id}/${slug}`} class={`mn mn-away ${g.away_score > g.home_score ? 'winner' : ''}`}>{teamName(g.away_team_id)}</a>
+            <span class="match-lugar">{g.lugar}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+
   {playoffs.cuartos.length > 0 && (
     <>
       <h3>Cuartos de Final</h3>
@@ -242,16 +400,96 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
     </>
   )}
 
+  {playoffs.finalIndependencia && (
+    <>
+      <h3>Final — {divisiones ? divisiones['1'].conferencia : 'Independencia'}</h3>
+      <div class="games-list">
+        <div class="match-row playoff-match final-match">
+          <a href={`${B}equipos/${playoffs.finalIndependencia.home_team_id}/${slug}`} class={`mn mn-home ${playoffs.finalIndependencia.home_score > playoffs.finalIndependencia.away_score ? 'winner' : ''}`}>{teamName(playoffs.finalIndependencia.home_team_id)}</a>
+          <span class="ml">{teamLogo(playoffs.finalIndependencia.home_team_id) ? <img src={teamLogo(playoffs.finalIndependencia.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <span class="ms mono">{playoffs.finalIndependencia.home_score} – {playoffs.finalIndependencia.away_score}</span>
+          <span class="ml">{teamLogo(playoffs.finalIndependencia.away_team_id) ? <img src={teamLogo(playoffs.finalIndependencia.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <a href={`${B}equipos/${playoffs.finalIndependencia.away_team_id}/${slug}`} class={`mn mn-away ${playoffs.finalIndependencia.away_score > playoffs.finalIndependencia.home_score ? 'winner' : ''}`}>{teamName(playoffs.finalIndependencia.away_team_id)}</a>
+          <span class="match-lugar">{playoffs.finalIndependencia.lugar}</span>
+        </div>
+      </div>
+    </>
+  )}
+
+  {playoffs.finalLibertad && (
+    <>
+      <h3>Final — {divisiones ? divisiones['2'].conferencia : 'Libertad'}</h3>
+      <div class="games-list">
+        <div class="match-row playoff-match final-match">
+          <a href={`${B}equipos/${playoffs.finalLibertad.home_team_id}/${slug}`} class={`mn mn-home ${playoffs.finalLibertad.home_score > playoffs.finalLibertad.away_score ? 'winner' : ''}`}>{teamName(playoffs.finalLibertad.home_team_id)}</a>
+          <span class="ml">{teamLogo(playoffs.finalLibertad.home_team_id) ? <img src={teamLogo(playoffs.finalLibertad.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <span class="ms mono">{playoffs.finalLibertad.home_score} – {playoffs.finalLibertad.away_score}</span>
+          <span class="ml">{teamLogo(playoffs.finalLibertad.away_team_id) ? <img src={teamLogo(playoffs.finalLibertad.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <a href={`${B}equipos/${playoffs.finalLibertad.away_team_id}/${slug}`} class={`mn mn-away ${playoffs.finalLibertad.away_score > playoffs.finalLibertad.home_score ? 'winner' : ''}`}>{teamName(playoffs.finalLibertad.away_team_id)}</a>
+          <span class="match-lugar">{playoffs.finalLibertad.lugar}</span>
+        </div>
+      </div>
+    </>
+  )}
+
+  {playoffs.finalNorte && (
+    <>
+      <h3>Final — Norte</h3>
+      <div class="games-list">
+        <div class="match-row playoff-match final-match">
+          <a href={`${B}equipos/${playoffs.finalNorte.home_team_id}/${slug}`} class={`mn mn-home ${playoffs.finalNorte.home_score > playoffs.finalNorte.away_score ? 'winner' : ''}`}>{teamName(playoffs.finalNorte.home_team_id)}</a>
+          <span class="ml">{teamLogo(playoffs.finalNorte.home_team_id) ? <img src={teamLogo(playoffs.finalNorte.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <span class="ms mono">{playoffs.finalNorte.home_score} – {playoffs.finalNorte.away_score}</span>
+          <span class="ml">{teamLogo(playoffs.finalNorte.away_team_id) ? <img src={teamLogo(playoffs.finalNorte.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <a href={`${B}equipos/${playoffs.finalNorte.away_team_id}/${slug}`} class={`mn mn-away ${playoffs.finalNorte.away_score > playoffs.finalNorte.home_score ? 'winner' : ''}`}>{teamName(playoffs.finalNorte.away_team_id)}</a>
+          <span class="match-lugar">{playoffs.finalNorte.lugar}</span>
+        </div>
+      </div>
+    </>
+  )}
+
+  {playoffs.finalRevolucionIndependencia && (
+    <>
+      <h3>Final — Revolución / Independencia</h3>
+      <div class="games-list">
+        <div class="match-row playoff-match final-match">
+          <a href={`${B}equipos/${playoffs.finalRevolucionIndependencia.home_team_id}/${slug}`} class={`mn mn-home ${playoffs.finalRevolucionIndependencia.home_score > playoffs.finalRevolucionIndependencia.away_score ? 'winner' : ''}`}>{teamName(playoffs.finalRevolucionIndependencia.home_team_id)}</a>
+          <span class="ml">{teamLogo(playoffs.finalRevolucionIndependencia.home_team_id) ? <img src={teamLogo(playoffs.finalRevolucionIndependencia.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <span class="ms mono">{playoffs.finalRevolucionIndependencia.home_score} – {playoffs.finalRevolucionIndependencia.away_score}</span>
+          <span class="ml">{teamLogo(playoffs.finalRevolucionIndependencia.away_team_id) ? <img src={teamLogo(playoffs.finalRevolucionIndependencia.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <a href={`${B}equipos/${playoffs.finalRevolucionIndependencia.away_team_id}/${slug}`} class={`mn mn-away ${playoffs.finalRevolucionIndependencia.away_score > playoffs.finalRevolucionIndependencia.home_score ? 'winner' : ''}`}>{teamName(playoffs.finalRevolucionIndependencia.away_team_id)}</a>
+          <span class="match-lugar">{playoffs.finalRevolucionIndependencia.lugar}</span>
+        </div>
+      </div>
+    </>
+  )}
+
+  {playoffs.finalCentro && (
+    <>
+      <h3>Final — Centro</h3>
+      <div class="games-list">
+        <div class="match-row playoff-match final-match">
+          <a href={`${B}equipos/${playoffs.finalCentro.home_team_id}/${slug}`} class={`mn mn-home ${playoffs.finalCentro.home_score > playoffs.finalCentro.away_score ? 'winner' : ''}`}>{teamName(playoffs.finalCentro.home_team_id)}</a>
+          <span class="ml">{teamLogo(playoffs.finalCentro.home_team_id) ? <img src={teamLogo(playoffs.finalCentro.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <span class="ms mono">{playoffs.finalCentro.home_score} – {playoffs.finalCentro.away_score}</span>
+          <span class="ml">{teamLogo(playoffs.finalCentro.away_team_id) ? <img src={teamLogo(playoffs.finalCentro.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
+          <a href={`${B}equipos/${playoffs.finalCentro.away_team_id}/${slug}`} class={`mn mn-away ${playoffs.finalCentro.away_score > playoffs.finalCentro.home_score ? 'winner' : ''}`}>{teamName(playoffs.finalCentro.away_team_id)}</a>
+          <span class="match-lugar">{playoffs.finalCentro.lugar}</span>
+        </div>
+      </div>
+    </>
+  )}
+
   {playoffs.final && (
     <>
       <h3>Final</h3>
       <div class="games-list">
         <div class="match-row playoff-match final-match">
-          <a href={`/equipos/${playoffs.final.home_team_id}/${year}`} class={`mn mn-home ${playoffs.final.home_score > playoffs.final.away_score ? 'winner' : ''}`}>{teamName(playoffs.final.home_team_id)}</a>
+          <a href={`${B}equipos/${playoffs.final.home_team_id}/${slug}`} class={`mn mn-home ${playoffs.final.home_score > playoffs.final.away_score ? 'winner' : ''}`}>{teamName(playoffs.final.home_team_id)}</a>
           <span class="ml">{teamLogo(playoffs.final.home_team_id) ? <img src={teamLogo(playoffs.final.home_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
           <span class="ms mono">{playoffs.final.home_score} – {playoffs.final.away_score}</span>
           <span class="ml">{teamLogo(playoffs.final.away_team_id) ? <img src={teamLogo(playoffs.final.away_team_id)!} alt="" class="match-logo" /> : <span class="ml-ph" />}</span>
-          <a href={`/equipos/${playoffs.final.away_team_id}/${year}`} class={`mn mn-away ${playoffs.final.away_score > playoffs.final.home_score ? 'winner' : ''}`}>{teamName(playoffs.final.away_team_id)}</a>
+          <a href={`${B}equipos/${playoffs.final.away_team_id}/${slug}`} class={`mn mn-away ${playoffs.final.away_score > playoffs.final.home_score ? 'winner' : ''}`}>{teamName(playoffs.final.away_team_id)}</a>
           <span class="match-lugar">{playoffs.final.lugar}</span>
         </div>
       </div>
@@ -264,6 +502,21 @@ const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
   h3 { margin: 1.25rem 0 0.5rem; font-size: 1rem; color: #444; }
   .grupo-title { font-size: 1.05rem; color: #1a1a2e; font-weight: 700; margin-top: 1.5rem; }
   .subtitle { color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 1.5rem; }
+
+  .interrupted-banner {
+    margin-bottom: 2rem;
+    padding: 0.75rem 1.5rem;
+    background: #fff8e1;
+    border: 2px solid #b8860b;
+    color: #7a5c00;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .banners-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .banners-row .champion-banner { flex: 1; min-width: 220px; margin-bottom: 0; }
 
   .champion-banner {
     margin-bottom: 2rem;

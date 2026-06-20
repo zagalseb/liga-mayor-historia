@@ -1,0 +1,43 @@
+{
+  "season": 2019,
+  "liga": "ONEFA",
+  "conferencia": "Jacinto Licea",
+  "division": 1,
+  "grupo": null,
+  "clasificados_playoffs": [
+    "aguilas_ipn", "anahuac_mx", "burros_ipn", "pumas_cu"
+  ],
+  "games": [
+    { "id": "2019-d1-001", "home_team_id": "potros_uaem", "away_team_id": "burros_ipn", "home_score": 14, "away_score": 28, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": "JJ Pichardo", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-002", "home_team_id": "aguilas_ipn", "away_team_id": "pumas_cu", "home_score": 7, "away_score": 28, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": "Cd de los Deportes", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-003", "home_team_id": "linces_uvm", "away_team_id": "aguilas_uach", "home_score": 13, "away_score": 0, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": "JOM", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-004", "home_team_id": "anahuac_mx", "away_team_id": "autenticos_uanl", "home_score": 29, "away_score": 22, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": "La Cueva", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-005", "home_team_id": "autenticos_uanl", "away_team_id": "burros_ipn", "home_score": 13, "away_score": 14, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": "Gaspar Mass", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-006", "home_team_id": "pumas_cu", "away_team_id": "linces_uvm", "home_score": 24, "away_score": 3, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": "E.O.U.", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-007", "home_team_id": "aguilas_ipn", "away_team_id": "potros_uaem", "home_score": 48, "away_score": 0, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": "Wilfrido Massieu", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-008", "home_team_id": "aguilas_uach", "away_team_id": "anahuac_mx", "home_score": 7, "away_score": 36, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": "ITESM Campus Chih.", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-009", "home_team_id": "linces_uvm", "away_team_id": "burros_ipn", "home_score": 17, "away_score": 21, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": "JOM", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-010", "home_team_id": "aguilas_uach", "away_team_id": "pumas_cu", "home_score": 24, "away_score": 45, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": "EOU Chih.", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-011", "home_team_id": "aguilas_ipn", "away_team_id": "autenticos_uanl", "home_score": 20, "away_score": 12, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": "Wilfrido Massieu", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-012", "home_team_id": "anahuac_mx", "away_team_id": "potros_uaem", "home_score": 38, "away_score": 6, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": "La Cueva", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-013", "home_team_id": "autenticos_uanl", "away_team_id": "potros_uaem", "home_score": 42, "away_score": 14, "jornada": 5, "tipo": "regular", "fecha": null, "lugar": "Gaspar Mass", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-014", "home_team_id": "linces_uvm", "away_team_id": "aguilas_ipn", "home_score": 16, "away_score": 20, "jornada": 5, "tipo": "regular", "fecha": null, "lugar": "JOM", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-015", "home_team_id": "pumas_cu", "away_team_id": "anahuac_mx", "home_score": 42, "away_score": 17, "jornada": 5, "tipo": "regular", "fecha": null, "lugar": "E.O.U.", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-016", "home_team_id": "burros_ipn", "away_team_id": "aguilas_uach", "home_score": 56, "away_score": 0, "jornada": 5, "tipo": "regular", "fecha": null, "lugar": "Wilfrido Massieu", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-017", "home_team_id": "linces_uvm", "away_team_id": "potros_uaem", "home_score": 17, "away_score": 13, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": "JOM", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-018", "home_team_id": "pumas_cu", "away_team_id": "burros_ipn", "home_score": 48, "away_score": 51, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": "E.O.U.", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-019", "home_team_id": "aguilas_uach", "away_team_id": "autenticos_uanl", "home_score": 10, "away_score": 24, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": "EOU Chih.", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-020", "home_team_id": "aguilas_ipn", "away_team_id": "anahuac_mx", "home_score": 31, "away_score": 24, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": "Casco de Santo Tomás", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-021", "home_team_id": "autenticos_uanl", "away_team_id": "pumas_cu", "home_score": 7, "away_score": 20, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": "Gaspar Mass", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-022", "home_team_id": "potros_uaem", "away_team_id": "aguilas_uach", "home_score": 22, "away_score": 21, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": "JJ Pichardo", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-023", "home_team_id": "anahuac_mx", "away_team_id": "linces_uvm", "home_score": 28, "away_score": 31, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": "La Cueva", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-024", "home_team_id": "burros_ipn", "away_team_id": "aguilas_ipn", "home_score": 23, "away_score": 16, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": "Wilfrido Massieu", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-025", "home_team_id": "autenticos_uanl", "away_team_id": "linces_uvm", "home_score": 34, "away_score": 23, "jornada": 8, "tipo": "regular", "fecha": null, "lugar": "Gaspar Mass", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-026", "home_team_id": "potros_uaem", "away_team_id": "pumas_cu", "home_score": 3, "away_score": 30, "jornada": 8, "tipo": "regular", "fecha": null, "lugar": "JJ Pichardo", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-027", "home_team_id": "aguilas_uach", "away_team_id": "aguilas_ipn", "home_score": 16, "away_score": 21, "jornada": 8, "tipo": "regular", "fecha": null, "lugar": "EOU Chih.", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-028", "home_team_id": "burros_ipn", "away_team_id": "anahuac_mx", "home_score": 21, "away_score": 45, "jornada": 8, "tipo": "regular", "fecha": null, "lugar": "Wilfrido Massieu", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-029", "home_team_id": "pumas_cu", "away_team_id": "aguilas_ipn", "home_score": 10, "away_score": 15, "jornada": null, "tipo": "playoffs_semi", "fecha": null, "lugar": "E.O.U.", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-030", "home_team_id": "burros_ipn", "away_team_id": "anahuac_mx", "home_score": 31, "away_score": 16, "jornada": null, "tipo": "playoffs_semi", "fecha": null, "lugar": "Wilfrido Massieu", "neutral": false, "cuenta_standing": true },
+    { "id": "2019-d1-031", "home_team_id": "burros_ipn", "away_team_id": "aguilas_ipn", "home_score": 24, "away_score": 17, "jornada": null, "tipo": "final", "fecha": null, "lugar": "Cd de los Deportes", "neutral": false, "cuenta_standing": true }
+  ]
+}

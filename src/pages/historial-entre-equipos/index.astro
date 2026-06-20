@@ -1,0 +1,468 @@
+---
+import Base from '../../layouts/Base.astro';
+import teams from '../../data/teams.json';
+import { allSeasons, seasonSlug } from '../../utils/seasons';
+import specialGamesData from '../../data/special-games.json';
+
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
+
+const sortedTeams = [...teams].sort((a, b) =>
+  a.nombre_corto.localeCompare(b.nombre_corto, 'es')
+);
+
+interface GameEntry {
+  id: string;
+  jornada: number | null;
+  fecha: string | null;
+  year: number;
+  contextLabel: string;
+  seasonSlug: string | null;
+  home_team_id: string;
+  away_team_id: string;
+  home_score: number | null;
+  away_score: number | null;
+  tipo: string;
+  subtipo: string | null;
+  lugar: string | null;
+  nota: string | null;
+  esSpecialGame: boolean;
+}
+
+const TIPO_LABEL: Record<string, string> = {
+  regular: 'Regular',
+  playoffs_wildcard: 'Wild Card',
+  playoffs_cuartos: 'Cuartos',
+  playoffs_semi: 'Semifinal',
+  final: 'Final',
+  final_independencia: 'Final',
+  final_libertad: 'Final',
+  final_revolucion_independencia: 'Final',
+  final_centro: 'Final',
+  final_norte: 'Final',
+  exhibicion: 'Exhibición',
+};
+
+const allGames: GameEntry[] = [];
+
+for (const season of allSeasons) {
+  const slug = seasonSlug(season);
+  const contextLabel =
+    season.division === 1 && season.year >= 2008 && season.year <= 2019
+      ? `${season.liga} ${season.year}`
+      : `${season.liga} ${season.conferencia} ${season.year}`;
+
+  for (const g of season.games) {
+    allGames.push({
+      id: g.id,
+      jornada: g.jornada ?? null,
+      fecha: g.fecha ?? null,
+      year: season.year,
+      contextLabel,
+      seasonSlug: slug,
+      home_team_id: g.home_team_id,
+      away_team_id: g.away_team_id,
+      home_score: g.home_score ?? null,
+      away_score: g.away_score ?? null,
+      tipo: g.tipo,
+      subtipo: null,
+      lugar: g.lugar ?? null,
+      nota: null,
+      esSpecialGame: false,
+    });
+  }
+}
+
+for (const g of specialGamesData.games) {
+  const year = g.fecha ? parseInt(g.fecha.slice(0, 4), 10) : 0;
+  allGames.push({
+    id: g.id,
+    jornada: null,
+    fecha: g.fecha ?? null,
+    year,
+    contextLabel: g.subtipo ?? g.tipo,
+    seasonSlug: null,
+    home_team_id: g.home_team_id,
+    away_team_id: g.away_team_id,
+    home_score: g.home_score ?? null,
+    away_score: g.away_score ?? null,
+    tipo: g.tipo,
+    subtipo: g.subtipo ?? null,
+    lugar: g.lugar ?? null,
+    nota: g.nota ?? null,
+    esSpecialGame: true,
+  });
+}
+
+const logoMap: Record<string, string> = {};
+for (const t of teams) {
+  if (t.logo_url) logoMap[t.id] = withBase(t.logo_url);
+}
+const nameMap: Record<string, string> = {};
+for (const t of teams) nameMap[t.id] = t.nombre_corto;
+
+const dataPayload = JSON.stringify({ allGames, logoMap, nameMap, B, TIPO_LABEL });
+---
+
+<Base title="Historial entre equipos">
+  <h1>Historial entre equipos</h1>
+
+  <form id="h2h-form" class="h2h-form">
+    <div class="h2h-selects">
+      <div class="select-wrap">
+        <label for="sel-a">Equipo A</label>
+        <select id="sel-a" name="a">
+          <option value="">— Seleccionar —</option>
+          {sortedTeams.map((t) => (
+            <option value={t.id}>{t.nombre_corto}</option>
+          ))}
+        </select>
+      </div>
+      <div class="vs-divider">vs.</div>
+      <div class="select-wrap">
+        <label for="sel-b">Equipo B</label>
+        <select id="sel-b" name="b">
+          <option value="">— Seleccionar —</option>
+          {sortedTeams.map((t) => (
+            <option value={t.id}>{t.nombre_corto}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+    <button type="submit">Ver historial →</button>
+  </form>
+
+  <div id="msg" class="muted" style="display:none; margin-top:1rem; font-size:0.95rem;"></div>
+
+  <div id="results" style="display:none">
+    <div id="h2h-summary"></div>
+    <div id="games-section" style="display:none">
+      <h2 id="games-title"></h2>
+      <div class="jornadas">
+        <div id="games-list" class="games-list"></div>
+      </div>
+      <ul id="notas-list" class="notas-list" style="display:none"></ul>
+    </div>
+  </div>
+</Base>
+
+<script define:vars={{ dataPayload }}>
+  const { allGames, logoMap, nameMap, B, TIPO_LABEL } = JSON.parse(dataPayload);
+
+  const selA = document.getElementById('sel-a');
+  const selB = document.getElementById('sel-b');
+  const form = document.getElementById('h2h-form');
+  const msg = document.getElementById('msg');
+  const results = document.getElementById('results');
+
+  function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function logoImg(id) {
+    const url = logoMap[id];
+    return url ? `<span class="ml"><img src="${url}" alt="" class="match-logo" /></span>`
+               : `<span class="ml"><span class="ml-ph"></span></span>`;
+  }
+
+  function fmtPct(n) { return n.toFixed(3).replace('0.', '.'); }
+
+  function render(a, b) {
+    const nameA = nameMap[a] ?? a;
+    const nameB = nameMap[b] ?? b;
+
+    const games = allGames
+      .filter(g =>
+        (g.home_team_id === a && g.away_team_id === b) ||
+        (g.home_team_id === b && g.away_team_id === a)
+      )
+      .sort((x, y) => {
+        if (x.fecha && y.fecha) return x.fecha.localeCompare(y.fecha);
+        if (x.fecha && !y.fecha) return x.year !== y.year ? x.year - y.year : -1;
+        if (!x.fecha && y.fecha) return x.year !== y.year ? x.year - y.year : 1;
+        return x.year - y.year;
+      });
+
+    results.style.display = '';
+    msg.style.display = 'none';
+
+    // --- Record ---
+    let wA = 0, wB = 0, ties = 0, pA = 0, pB = 0, hasScored = false;
+    for (const g of games) {
+      if (g.home_score == null || g.away_score == null) continue;
+      const isAHome = g.home_team_id === a;
+      const sA = isAHome ? g.home_score : g.away_score;
+      const sB = isAHome ? g.away_score : g.home_score;
+      pA += sA; pB += sB; hasScored = true;
+      if (sA > sB) wA++; else if (sB > sA) wB++; else ties++;
+    }
+
+    const logoA = logoMap[a] ? `<img src="${logoMap[a]}" alt="" class="summary-logo" />` : '';
+    const logoB = logoMap[b] ? `<img src="${logoMap[b]}" alt="" class="summary-logo" />` : '';
+
+    const recW = ties > 0
+      ? `${wA} — ${wB} — ${ties}`
+      : `${wA} — ${wB}`;
+    const recLabel = ties > 0 ? 'G — P — E' : 'G — P';
+
+    const summaryHTML = `
+      <div class="h2h-card">
+        <div class="h2h-side">
+          ${logoA}
+          <span class="h2h-name">${esc(nameA)}</span>
+        </div>
+        <div class="h2h-center">
+          <div class="record-bar">
+            ${hasScored ? `
+              <div class="stat"><span class="val">${wA}</span><span class="lbl">G</span></div>
+              <div class="stat sep"><span class="val muted">—</span><span class="lbl">&nbsp;</span></div>
+              <div class="stat"><span class="val">${wB}</span><span class="lbl">G</span></div>
+              ${ties > 0 ? `<div class="stat sep"><span class="val muted">—</span><span class="lbl">&nbsp;</span></div><div class="stat"><span class="val">${ties}</span><span class="lbl">E</span></div>` : ''}
+            ` : '<div class="stat"><span class="val muted">—</span><span class="lbl">Sin partidos</span></div>'}
+          </div>
+          ${hasScored ? `<div class="pts-row"><span class="pts-val">${pA}</span><span class="pts-sep">—</span><span class="pts-val">${pB}</span><span class="pts-lbl">pts totales</span></div>` : ''}
+        </div>
+        <div class="h2h-side right">
+          <span class="h2h-name">${esc(nameB)}</span>
+          ${logoB}
+        </div>
+      </div>
+    `;
+    document.getElementById('h2h-summary').innerHTML = summaryHTML;
+
+    const gamesSection = document.getElementById('games-section');
+    const gamesList = document.getElementById('games-list');
+    const notasList = document.getElementById('notas-list');
+
+    if (games.length === 0) {
+      gamesSection.style.display = 'none';
+      msg.textContent = 'Estos equipos no se han enfrentado en la historia registrada.';
+      msg.style.display = '';
+      return;
+    }
+
+    gamesSection.style.display = '';
+    document.getElementById('games-title').textContent = `Partidos (${games.length})`;
+
+    const rows = games.map(g => {
+      const cancelled = g.home_score == null || g.away_score == null;
+      const homeWon = !cancelled && g.home_score > g.away_score;
+      const awayWon = !cancelled && g.away_score > g.home_score;
+      const tipoLabel = g.subtipo || TIPO_LABEL[g.tipo] || g.tipo;
+      const ctx = g.seasonSlug
+        ? `<a href="${B}temporadas/${g.seasonSlug}">${esc(g.contextLabel)}</a>`
+        : esc(g.contextLabel);
+      const badge = g.esSpecialGame ? ` <span class="badge-special">Especial</span>` : '';
+      const score = cancelled
+        ? `<span class="ms cancelled">—</span>`
+        : `<span class="ms mono">${g.home_score} – ${g.away_score}</span>`;
+      const ronda = g.jornada != null ? `Sem. ${g.jornada}` : esc(tipoLabel);
+      const meta = g.esSpecialGame
+        ? `${esc(g.subtipo ?? g.tipo)} ${g.year}${badge}`
+        : `${ronda} · ${ctx}`;
+
+      return `
+        <div class="match-row${g.esSpecialGame ? ' special-row' : ''}">
+          <a href="${B}equipos/${g.home_team_id}/${g.seasonSlug || ''}" class="mn mn-home${homeWon ? ' winner' : ''}">${esc(nameMap[g.home_team_id] ?? g.home_team_id)}</a>
+          ${logoImg(g.home_team_id)}
+          ${score}
+          ${logoImg(g.away_team_id)}
+          <a href="${B}equipos/${g.away_team_id}/${g.seasonSlug || ''}" class="mn mn-away${awayWon ? ' winner' : ''}">${esc(nameMap[g.away_team_id] ?? g.away_team_id)}</a>
+          <span class="match-meta">${meta}</span>
+        </div>`;
+    });
+    gamesList.innerHTML = rows.join('');
+
+    const notas = games.filter(g => g.nota);
+    if (notas.length > 0) {
+      notasList.innerHTML = notas.map(g =>
+        `<li><span class="nota-id">${esc(g.id)}</span>: ${esc(g.nota)}</li>`
+      ).join('');
+      notasList.style.display = '';
+    } else {
+      notasList.style.display = 'none';
+    }
+  }
+
+  function init() {
+    const p = new URLSearchParams(window.location.search);
+    const a = p.get('a') ?? '';
+    const b = p.get('b') ?? '';
+    if (a) selA.value = a;
+    if (b) selB.value = b;
+
+    if (!a && !b) return;
+
+    if (!nameMap[a] || !nameMap[b] || a === b) {
+      msg.textContent = 'Elegí dos equipos distintos para ver su historial.';
+      msg.style.display = '';
+      results.style.display = 'none';
+      return;
+    }
+
+    render(a, b);
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const a = selA.value;
+    const b = selB.value;
+    const url = new URL(window.location.href);
+    url.search = '';
+    if (a) url.searchParams.set('a', a);
+    if (b) url.searchParams.set('b', b);
+    window.history.pushState({}, '', url);
+    init();
+  });
+
+  init();
+</script>
+
+<style is:global>
+  h1 { margin-bottom: 1.5rem; }
+  h2 { margin: 2rem 0 0.75rem; font-size: 1.1rem; border-bottom: 2px solid #1a1a2e; padding-bottom: 0.25rem; }
+
+  /* ── Selector ── */
+  .h2h-form {
+    display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap;
+    margin-bottom: 1.5rem; padding: 1.25rem 1.5rem;
+    background: #fff; border: 1px solid #ddd; border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .h2h-selects {
+    display: flex; align-items: flex-end; gap: 0; flex: 1; min-width: 0;
+    border: 1px solid #ccc; border-radius: 6px; overflow: hidden; background: #fff;
+  }
+  .select-wrap {
+    display: flex; flex-direction: column; gap: 0; flex: 1; min-width: 140px;
+    padding: 0.6rem 0.75rem 0.5rem;
+    background: #fff;
+  }
+  .select-wrap:first-child { border-right: 1px solid #e0e0e0; }
+  .select-wrap label {
+    font-size: 0.7rem; font-weight: 700; color: #999;
+    text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.25rem;
+  }
+  select {
+    border: none; outline: none; font-size: 0.95rem; font-weight: 600;
+    color: #1a1a1a; background: transparent; cursor: pointer;
+    padding: 0; width: 100%;
+  }
+  .vs-divider {
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 0.75rem; font-size: 0.8rem; font-weight: 700;
+    color: #bbb; background: #f9f9f9; border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0; white-space: nowrap; flex-shrink: 0;
+  }
+  button[type="submit"] {
+    padding: 0.65rem 1.5rem; background: #1a1a2e; color: #fff;
+    border: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; white-space: nowrap; letter-spacing: 0.01em;
+    transition: background 0.15s;
+  }
+  button[type="submit"]:hover { background: #2d2d50; }
+
+  /* ── Summary card ── */
+  .h2h-card {
+    display: flex; align-items: center; gap: 1rem;
+    background: #fff; border: 1px solid #ddd; border-radius: 6px;
+    padding: 1.25rem 1.5rem; margin-bottom: 0.5rem;
+  }
+  .h2h-side {
+    display: flex; align-items: center; gap: 0.6rem; flex: 1;
+  }
+  .h2h-side.right { flex-direction: row-reverse; }
+  .summary-logo { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
+  .h2h-name { font-size: 1rem; font-weight: 700; }
+  .h2h-center { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+
+  /* record-bar — same as equipos/[id]/index.astro */
+  .record-bar {
+    display: flex; gap: 0; border: 1px solid #ddd; border-radius: 6px;
+    overflow: hidden; width: fit-content;
+  }
+  .stat {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 0.5rem 1rem; border-right: 1px solid #eee; background: #fff;
+  }
+  .stat:last-child { border-right: none; }
+  .stat.sep { padding: 0.5rem 0.4rem; background: #fff; }
+  .val { font-size: 1.3rem; font-weight: 700; line-height: 1; }
+  .val.muted { color: #aaa; }
+  .lbl { font-size: 0.7rem; color: #888; margin-top: 0.2rem; text-transform: uppercase; }
+
+  .pts-row {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.8rem; color: #888;
+  }
+  .pts-val { font-weight: 700; color: #333; font-size: 0.85rem; }
+  .pts-sep { color: #bbb; }
+  .pts-lbl { color: #aaa; }
+
+  /* ── Match rows — same grid as temporadas/[slug].astro ── */
+  .games-list { display: flex; flex-direction: column; }
+
+  .match-row {
+    display: grid;
+    grid-template-columns: 1fr 32px 90px 32px 1fr 1fr;
+    align-items: center;
+    gap: 0 0.4rem;
+    padding: 0.45rem 1rem;
+    font-size: 0.88rem;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+  }
+  .match-row:first-child { border-top: 1px solid #eee; border-radius: 4px 4px 0 0; }
+  .match-row:last-child { border-radius: 0 0 4px 4px; }
+  .match-row:hover { background: #f5f7ff; }
+  .special-row { background: #fffbf0; }
+  .special-row:hover { background: #fff5d6; }
+
+  .mn {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    text-decoration: none; color: inherit; font-size: 0.88rem; min-width: 0;
+  }
+  .mn:hover { text-decoration: underline; }
+  .mn.winner { font-weight: 700; }
+  .mn-home { text-align: right; }
+  .mn-away { text-align: left; }
+
+  .ml {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+  }
+  .match-logo { width: 28px; height: 28px; object-fit: contain; display: block; }
+  .ml-ph { display: block; width: 28px; height: 28px; }
+
+  .ms {
+    text-align: center; font-weight: 700;
+    font-variant-numeric: tabular-nums; font-size: 0.92rem; white-space: nowrap;
+  }
+  .cancelled { text-align: center; color: #bbb; font-size: 0.8rem; font-weight: 400; }
+
+  .match-meta {
+    color: #888; font-size: 0.75rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding-left: 0.5rem;
+  }
+  .match-meta a { color: #555; }
+  .match-meta a:hover { text-decoration: underline; }
+
+  .badge-special {
+    display: inline-block; margin-left: 0.3rem; padding: 0.05rem 0.35rem;
+    background: #b8860b; color: #fff; border-radius: 3px;
+    font-size: 0.65rem; font-weight: 600; vertical-align: middle;
+  }
+
+  .notas-list {
+    margin-top: 0.75rem; padding-left: 0; list-style: none;
+    font-size: 0.78rem; color: #666;
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .nota-id { font-weight: 600; color: #444; }
+
+  .mono { font-variant-numeric: tabular-nums; }
+  .muted { color: #888; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>

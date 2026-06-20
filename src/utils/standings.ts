@@ -5,8 +5,8 @@ export interface GameRecord {
   fecha: string;
   home_team_id: string;
   away_team_id: string;
-  home_score: number;
-  away_score: number;
+  home_score: number | null;
+  away_score: number | null;
   lugar: string;
   neutral: boolean;
   cuenta_standing?: boolean;
@@ -35,7 +35,7 @@ function resultadoDirecto(
       (g.home_team_id === teamId && g.away_team_id === rivalId) ||
       (g.home_team_id === rivalId && g.away_team_id === teamId)
   );
-  if (!game) return null;
+  if (!game || game.home_score == null || game.away_score == null) return null;
   return game.home_team_id === teamId
     ? game.home_score > game.away_score
     : game.away_score > game.home_score;
@@ -96,15 +96,116 @@ export function calcStandingsPorGrupo(
 ): Record<string, TeamStanding[]> {
   const allStandings = calcStandings(games);
   const byTeam = new Map(allStandings.map((s) => [s.team_id, s]));
+  const regularGames = games.filter(
+    (g) => g.tipo === 'regular' && g.cuenta_standing !== false
+  );
 
   const result: Record<string, TeamStanding[]> = {};
   for (const [nombre, teamIds] of Object.entries(grupos)) {
-    result[nombre] = teamIds
+    const rows = teamIds
       .map((id) => byTeam.get(id))
-      .filter((s): s is TeamStanding => s !== undefined)
-      .sort((a, b) => b.pct - a.pct || b.dif - a.dif);
+      .filter((s): s is TeamStanding => s !== undefined);
+
+    rows.sort((a, b) => b.pct - a.pct);
+
+    const resolved: TeamStanding[] = [];
+    let i = 0;
+    while (i < rows.length) {
+      let j = i + 1;
+      while (j < rows.length && rows[j].pct === rows[i].pct) j++;
+      const group = rows.slice(i, j);
+      resolved.push(...resolverDesempate(group, regularGames));
+      i = j;
+    }
+    result[nombre] = resolved;
   }
   return result;
+}
+
+export function calcStandingsPorDivision(
+  games: GameRecord[],
+  divisiones: Record<string, { conferencia: string; equipos: string[] }>
+): Record<string, TeamStanding[]> {
+  const allStandings = calcStandings(games);
+  const byTeam = new Map(allStandings.map((s) => [s.team_id, s]));
+  const regularGames = games.filter(
+    (g) => g.tipo === 'regular' && g.cuenta_standing !== false
+  );
+
+  const result: Record<string, TeamStanding[]> = {};
+  for (const [divKey, { equipos }] of Object.entries(divisiones)) {
+    const rows = equipos
+      .map((id) => byTeam.get(id))
+      .filter((s): s is TeamStanding => s !== undefined);
+
+    rows.sort((a, b) => b.pct - a.pct);
+
+    const resolved: TeamStanding[] = [];
+    let i = 0;
+    while (i < rows.length) {
+      let j = i + 1;
+      while (j < rows.length && rows[j].pct === rows[i].pct) j++;
+      const group = rows.slice(i, j);
+      resolved.push(...resolverDesempate(group, regularGames));
+      i = j;
+    }
+    result[divKey] = resolved;
+  }
+  return result;
+}
+
+export function calcAllTimeStandings(
+  seasons: { division: number; games: GameRecord[]; divisiones?: Record<string, { equipos: string[] }> }[],
+  division: number
+): TeamStanding[] {
+  const map = new Map<string, TeamStanding>();
+
+  const get = (id: string): TeamStanding => {
+    if (!map.has(id)) {
+      map.set(id, { team_id: id, pj: 0, g: 0, p: 0, pct: 0, pf: 0, pc: 0, dif: 0 });
+    }
+    return map.get(id)!;
+  };
+
+  const addForTeam = (teamId: string, myScore: number, theirScore: number) => {
+    const entry = get(teamId);
+    const won = myScore > theirScore;
+    entry.pj++;
+    entry.pf += myScore;
+    entry.pc += theirScore;
+    won ? entry.g++ : entry.p++;
+  };
+
+  for (const season of seasons) {
+    if (season.divisiones) {
+      const divInfo = season.divisiones[String(division)];
+      if (!divInfo) continue;
+      const divTeams = new Set(divInfo.equipos);
+      for (const game of season.games) {
+        if (game.cuenta_standing === false || game.home_score == null || game.away_score == null) continue;
+        if (divTeams.has(game.home_team_id))
+          addForTeam(game.home_team_id, game.home_score, game.away_score);
+        if (divTeams.has(game.away_team_id))
+          addForTeam(game.away_team_id, game.away_score, game.home_score);
+      }
+    } else {
+      if (season.division !== division) continue;
+      for (const game of season.games) {
+        if (game.cuenta_standing === false || game.home_score == null || game.away_score == null) continue;
+        addForTeam(game.home_team_id, game.home_score, game.away_score);
+        addForTeam(game.away_team_id, game.away_score, game.home_score);
+      }
+    }
+  }
+
+  for (const entry of map.values()) {
+    entry.dif = entry.pf - entry.pc;
+    entry.pct = entry.pj > 0 ? entry.g / entry.pj : 0;
+  }
+
+  return [...map.values()].sort((a, b) =>
+    b.pct !== a.pct ? b.pct - a.pct : b.dif - a.dif
+  );
 }
 
 export function calcStandings(games: GameRecord[]): TeamStanding[] {
@@ -122,21 +223,24 @@ export function calcStandings(games: GameRecord[]): TeamStanding[] {
   for (const game of games) {
     if (game.tipo !== 'regular') continue;
     if (game.cuenta_standing === false) continue;
+    if (game.home_score == null || game.away_score == null) continue;
 
     regularGames.push(game);
 
     const home = get(game.home_team_id);
     const away = get(game.away_team_id);
-    const homeWon = game.home_score > game.away_score;
+    const hs = game.home_score as number;
+    const as_ = game.away_score as number;
+    const homeWon = hs > as_;
 
     home.pj++;
-    home.pf += game.home_score;
-    home.pc += game.away_score;
+    home.pf += hs;
+    home.pc += as_;
     homeWon ? home.g++ : home.p++;
 
     away.pj++;
-    away.pf += game.away_score;
-    away.pc += game.home_score;
+    away.pf += as_;
+    away.pc += hs;
     homeWon ? away.p++ : away.g++;
   }
 

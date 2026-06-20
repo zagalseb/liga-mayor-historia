@@ -7,7 +7,8 @@
     "ciudad": "Monterrey",
     "estado": "NL",
     "logo_url": "/logos/borregos_mty.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "autenticos_uanl",
@@ -17,7 +18,8 @@
     "ciudad": "San Nicolás de los Garza",
     "estado": "NL",
     "logo_url": "/logos/autenticos_uanl.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "pumas_cu",
@@ -27,7 +29,8 @@
     "ciudad": "Ciudad Universitaria",
     "estado": "CDMX",
     "logo_url": "/logos/pumas_cu.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "pumas_aca",
@@ -37,7 +40,8 @@
     "ciudad": "Naucalpan de Juárez",
     "estado": "Estado de México",
     "logo_url": "/logos/pumas_aca.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "aguilas_ipn",
@@ -47,7 +51,8 @@
     "ciudad": "Casco de Santo Tomás",
     "estado": "CDMX",
     "logo_url": "/logos/aguilas_ipn.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "burros_ipn",
@@ -57,7 +62,8 @@
     "ciudad": "Zacatenco",
     "estado": "CDMX",
     "logo_url": "/logos/burros_ipn.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "borregos_cem",
@@ -67,7 +73,8 @@
     "ciudad": "Lago de Guadalupe",
     "estado": "Estado de México",
     "logo_url": "/logos/borregos_cem.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "anahuac_mx",
@@ -77,7 +84,8 @@
     "ciudad": "Huixquilucan",
     "estado": "Estado de México",
     "logo_url": "/logos/anahuac_mx.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "borregos_gdl",
@@ -87,7 +95,8 @@
     "ciudad": "Guadalajara",
     "estado": "Jalisco",
     "logo_url": "/logos/borregos_gdl.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "borregos_pue",
@@ -97,7 +106,8 @@
     "ciudad": "Puebla",
     "estado": "Puebla",
     "logo_url": "/logos/borregos_pue.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "linces_uvm",
@@ -107,7 +117,8 @@
     "ciudad": "Naucalpan de Juárez",
     "estado": "Estado de México",
     "logo_url": "/logos/linces_uvm.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "borregos_ccm",
@@ -117,7 +128,8 @@
     "ciudad": "Tlalpan",
     "estado": "CDMX",
     "logo_url": "/logos/borregos_ccm.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "aztecas_udlap",
@@ -127,7 +139,8 @@
     "ciudad": "San Andrés Cholula",
     "estado": "Puebla",
     "logo_url": "/logos/aztecas_udlap.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "zorros_cetys",
@@ -137,7 +150,8 @@
     "ciudad": "Mexicali",
     "estado": "Baja California",
     "logo_url": "/logos/zorros_cetys.png",
-    "colores": ""
+    "colores": "",
+    "activo": true
   },
   {
     "id": "aguilas_uach",
@@ -147,7 +161,8 @@
     "ciudad": "Chihuahua",
     "estado": "Chihuahua",
     "logo_url": "/logos/aguilas_uach.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "tecos_uag",
@@ -157,7 +172,8 @@
     "ciudad": "Guadalajara",
     "estado": "Jalisco",
     "logo_url": "/logos/tecos_uag.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "borregos_qro",
@@ -167,7 +183,8 @@
     "ciudad": "Querétaro",
     "estado": "Querétaro",
     "logo_url": "/logos/borregos_qro.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "anahuac_qro",
@@ -177,7 +194,8 @@
     "ciudad": "Querétaro",
     "estado": "Querétaro",
     "logo_url": "/logos/anahuac_qro.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "lobos_uadec",
@@ -187,7 +205,8 @@
     "ciudad": "Saltillo",
     "estado": "Coahuila",
     "logo_url": "/logos/lobos_uadec.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "cardinals_uiw",
@@ -197,7 +216,8 @@
     "ciudad": "Irapuato",
     "estado": "Guanajuato",
     "logo_url": "/logos/cardinals_uiw.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "lobos_ulm",
@@ -207,7 +227,8 @@
     "ciudad": "Celaya",
     "estado": "Guanajuato",
     "logo_url": "/logos/lobos_ulm.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "redwolves_qro",
@@ -217,7 +238,8 @@
     "ciudad": "Querétaro",
     "estado": "Querétaro",
     "logo_url": "/logos/redwolves_qro.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "potros_itson",
@@ -227,7 +249,8 @@
     "ciudad": "Ciudad Obregón",
     "estado": "Sonora",
     "logo_url": "/logos/potros_itson.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "indios_uacj",
@@ -237,7 +260,8 @@
     "ciudad": "Ciudad Juárez",
     "estado": "Chihuahua",
     "logo_url": "/logos/indios_uacj.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "cimarrones_uabc",
@@ -247,7 +271,8 @@
     "ciudad": "Tijuana",
     "estado": "Baja California",
     "logo_url": "/logos/cimarrones_uabc.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "correcaminos_uat",
@@ -257,7 +282,8 @@
     "ciudad": "Ciudad Victoria",
     "estado": "Tamaulipas",
     "logo_url": "/logos/correcaminos_uat.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "anahuac_cun",
@@ -267,7 +293,8 @@
     "ciudad": "Cancún",
     "estado": "Quintana Roo",
     "logo_url": "/logos/anahuac_cun.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "buhos_ipn",
@@ -277,7 +304,8 @@
     "ciudad": "Zacatenco",
     "estado": "CDMX",
     "logo_url": "/logos/buhos_ipn.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "potros_uaem",
@@ -287,7 +315,8 @@
     "ciudad": "Toluca",
     "estado": "Estado de México",
     "logo_url": "/logos/potros_uaem.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "frailes_ut",
@@ -297,7 +326,8 @@
     "ciudad": "Lindavista",
     "estado": "CDMX",
     "logo_url": "/logos/frailes_ut.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "toros_chapingo",
@@ -307,7 +337,8 @@
     "ciudad": "Texcoco",
     "estado": "Estado de México",
     "logo_url": "/logos/toros_chapingo.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "panteras_21",
@@ -317,7 +348,8 @@
     "ciudad": "Zinacantepec",
     "estado": "Estado de México",
     "logo_url": "/logos/panteras_21.png",
-    "colores": null
+    "colores": null,
+    "activo": true
   },
   {
     "id": "halcones_uv",
@@ -327,6 +359,62 @@
     "ciudad": "Xalapa",
     "estado": "Veracruz",
     "logo_url": "/logos/halcones_uv.png",
-    "colores": null
+    "colores": null,
+    "activo": true
+  },
+  {
+    "id": "lobos_buap",
+    "nombre_oficial": "Lobos BUAP",
+    "nombre_corto": "Lobos BUAP",
+    "universidad": "Benemérita Universidad Autónoma de Puebla",
+    "ciudad": "Puebla",
+    "estado": "Puebla",
+    "logo_url": "/logos/lobos_buap.png",
+    "colores": null,
+    "activo": false
+  },
+  {
+    "id": "jaguares_uteci",
+    "nombre_oficial": "Jaguares UTECI",
+    "nombre_corto": "Jaguares UTECI",
+    "universidad": null,
+    "ciudad": null,
+    "estado": null,
+    "logo_url": "logos/jaguares_uteci.png",
+    "colores": null,
+    "activo": false
+  },
+  {
+    "id": "leones_udg",
+    "nombre_oficial": "Leones Negros UDG",
+    "nombre_corto": "Leones Negros",
+    "universidad": "Universidad de Guadalajara",
+    "ciudad": "Guadalajara",
+    "estado": "Jalisco",
+    "logo_url": "/logos/leones_udg.png",
+    "colores": null,
+    "activo": false
+  },
+  {
+    "id": "borregos_mex",
+    "nombre_oficial": "Borregos México",
+    "nombre_corto": "Borregos MEX",
+    "universidad": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+    "ciudad": "Lago de Guadalupe",
+    "estado": "Estado de México",
+    "logo_url": "/logos/borregos_mex.png",
+    "colores": null,
+    "activo": false
+  },
+  {
+    "id": "borregos_tol",
+    "nombre_oficial": "Borregos Toluca",
+    "nombre_corto": "Borregos Toluca",
+    "universidad": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+    "ciudad": "Toluca",
+    "estado": "Estado de México",
+    "logo_url": "/logos/borregos_tol.png",
+    "colores": null,
+    "activo": false
   }
 ]

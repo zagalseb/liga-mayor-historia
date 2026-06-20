@@ -1,0 +1,349 @@
+---
+import Base from '../layouts/Base.astro';
+import teams from '../data/teams.json';
+import { allSeasons } from '../utils/seasons';
+
+const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
+
+// Minimal season data serialized for the client
+const seasonPayload = allSeasons.map((s) => ({
+  year: s.year,
+  division: s.division,
+  divisiones: s.divisiones
+    ? Object.fromEntries(
+        Object.entries(s.divisiones).map(([k, v]) => [k, { equipos: v.equipos }])
+      )
+    : undefined,
+  games: s.games.map((g) => ({
+    h: g.home_team_id,
+    a: g.away_team_id,
+    hs: g.home_score,
+    as_: g.away_score,
+  })),
+}));
+
+const availableYears = [...new Set(allSeasons.map((s) => s.year))].sort((a, b) => a - b);
+const minYear = availableYears[0];
+const maxYear = availableYears[availableYears.length - 1];
+
+// Team lookup maps for the client
+const teamMap = Object.fromEntries(
+  teams.map((t) => [t.id, { name: t.nombre_corto, logo: t.logo_url ? withBase(t.logo_url) : null }])
+);
+---
+
+<Base title="Histórico All-Time">
+  <h1>Estadísticas All-Time</h1>
+  <p class="subtitle">Acumulado · Regular + Playoffs · Haz clic en un encabezado para ordenar</p>
+
+  <div class="filter-bar">
+    <label>Desde <select id="sel-desde"></select></label>
+    <label>Hasta <select id="sel-hasta"></select></label>
+    <span class="filter-note" id="filter-note"></span>
+  </div>
+
+  <div id="tables-container">
+    <div id="div1-section">
+      <h2>All-Time — 14 Grandes</h2>
+      <div class="table-wrap">
+        <table class="sortable" id="div1">
+          <thead>
+            <tr>
+              <th class="col-rank">#</th>
+              <th class="col-logo"></th>
+              <th class="col-name left sortable-col" data-col="name" data-type="str">Equipo <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pj" data-type="num">PJ <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="g" data-type="num">G <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="p" data-type="num">P <span class="sort-icon"></span></th>
+              <th class="center sortable-col active desc" data-col="pct" data-type="num">PCT <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pf" data-type="num">PF <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pc" data-type="num">PC <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="dif" data-type="num">DIF <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pfpj" data-type="num">PF/J <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pcpj" data-type="num">PC/J <span class="sort-icon"></span></th>
+            </tr>
+          </thead>
+          <tbody id="div1-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="div2-section">
+      <h2>All-Time — Conferencia Nacional</h2>
+      <div class="table-wrap">
+        <table class="sortable" id="div2">
+          <thead>
+            <tr>
+              <th class="col-rank">#</th>
+              <th class="col-logo"></th>
+              <th class="col-name left sortable-col" data-col="name" data-type="str">Equipo <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pj" data-type="num">PJ <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="g" data-type="num">G <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="p" data-type="num">P <span class="sort-icon"></span></th>
+              <th class="center sortable-col active desc" data-col="pct" data-type="num">PCT <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pf" data-type="num">PF <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pc" data-type="num">PC <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="dif" data-type="num">DIF <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pfpj" data-type="num">PF/J <span class="sort-icon"></span></th>
+              <th class="center sortable-col" data-col="pcpj" data-type="num">PC/J <span class="sort-icon"></span></th>
+            </tr>
+          </thead>
+          <tbody id="div2-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style is:global>
+  h2 { margin: 2rem 0 0.75rem; font-size: 1.2rem; border-bottom: 2px solid #1a1a2e; padding-bottom: 0.25rem; }
+  .subtitle { color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 1rem; }
+
+  .filter-bar {
+    display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;
+    margin-bottom: 1.5rem; padding: 0.75rem 1rem;
+    background: #f5f7ff; border: 1px solid #dde; border-radius: 6px;
+  }
+  .filter-bar label { font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; }
+  .filter-bar select {
+    padding: 0.3rem 0.5rem; border: 1px solid #ccd; border-radius: 4px;
+    font-size: 0.9rem; background: #fff;
+  }
+  .filter-note { font-size: 0.8rem; color: #888; margin-left: auto; }
+
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+  th { background: #1a1a2e; color: #fff; padding: 0.5rem 0.75rem; font-weight: 600; }
+  td { padding: 0.4rem 0.75rem; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f0f4ff; }
+
+  th.sortable-col { cursor: pointer; user-select: none; white-space: nowrap; }
+  th.sortable-col:hover { background: #2d2d4e; }
+  th.sortable-col.active { background: #2a4080; }
+  .sort-icon::after { content: ''; }
+  th.sortable-col.active.asc .sort-icon::after { content: ' ▲'; font-size: 0.7em; }
+  th.sortable-col.active.desc .sort-icon::after { content: ' ▼'; font-size: 0.7em; }
+
+  .col-rank { width: 32px; }
+  .col-logo { width: 40px; }
+  .logo-cell { width: 40px; padding: 0.2rem 0.4rem; text-align: center; }
+  .team-logo { width: 32px; height: 32px; object-fit: contain; display: block; margin: 0 auto; }
+  .left { text-align: left; }
+  .center { text-align: center; }
+  .mono { font-variant-numeric: tabular-nums; }
+  .muted { color: #999; }
+  .pos { color: #1a7a1a; }
+  .neg { color: #a00; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+
+<script define:vars={{ seasonPayload, teamMap, availableYears, minYear, maxYear, B }}>
+  // ── Data ────────────────────────────────────────────────────────────────────
+
+  function calcAllTime(seasons, division, fromYear, toYear) {
+    const map = new Map();
+    const get = (id) => {
+      if (!map.has(id)) map.set(id, { id, pj: 0, g: 0, p: 0, pf: 0, pc: 0 });
+      return map.get(id);
+    };
+    const add = (teamId, myScore, theirScore) => {
+      const e = get(teamId);
+      e.pj++; e.pf += myScore; e.pc += theirScore;
+      myScore > theirScore ? e.g++ : e.p++;
+    };
+
+    for (const s of seasons) {
+      if (s.year < fromYear || s.year > toYear) continue;
+
+      if (s.divisiones) {
+        const divInfo = s.divisiones[String(division)];
+        if (!divInfo) continue;
+        const divTeams = new Set(divInfo.equipos);
+        for (const g of s.games) {
+          if (divTeams.has(g.h)) add(g.h, g.hs, g.as_);
+          if (divTeams.has(g.a)) add(g.a, g.as_, g.hs);
+        }
+      } else {
+        if (s.division !== division) continue;
+        for (const g of s.games) {
+          add(g.h, g.hs, g.as_);
+          add(g.a, g.as_, g.hs);
+        }
+      }
+    }
+
+    return [...map.values()]
+      .map((e) => ({
+        ...e,
+        pct: e.pj > 0 ? e.g / e.pj : 0,
+        dif: e.pf - e.pc,
+      }))
+      .sort((a, b) => b.pct !== a.pct ? b.pct - a.pct : b.dif - a.dif);
+  }
+
+  function fmtPct(n) { return n.toFixed(3).replace('0.', '.'); }
+
+  function buildRow(row) {
+    const team = teamMap[row.id] ?? { name: row.id, logo: null };
+    const pfpj = row.pj > 0 ? row.pf / row.pj : 0;
+    const pcpj = row.pj > 0 ? row.pc / row.pj : 0;
+    const difCls = row.dif > 0 ? 'pos' : row.dif < 0 ? 'neg' : '';
+    const difStr = (row.dif > 0 ? '+' : '') + row.dif;
+    const tr = document.createElement('tr');
+    tr.dataset.name = team.name;
+    tr.dataset.pj   = String(row.pj);
+    tr.dataset.g    = String(row.g);
+    tr.dataset.p    = String(row.p);
+    tr.dataset.pct  = String(row.pct);
+    tr.dataset.pf   = String(row.pf);
+    tr.dataset.pc   = String(row.pc);
+    tr.dataset.dif  = String(row.dif);
+    tr.dataset.pfpj = String(pfpj);
+    tr.dataset.pcpj = String(pcpj);
+    tr.innerHTML = `
+      <td class="col-rank center muted"></td>
+      <td class="logo-cell">${team.logo ? `<img src="${team.logo}" alt="" class="team-logo">` : ''}</td>
+      <td><a href="${B}equipos/${row.id}">${team.name}</a></td>
+      <td class="center">${row.pj}</td>
+      <td class="center">${row.g}</td>
+      <td class="center">${row.p}</td>
+      <td class="center mono">${fmtPct(row.pct)}</td>
+      <td class="center">${row.pf}</td>
+      <td class="center">${row.pc}</td>
+      <td class="center mono ${difCls}">${difStr}</td>
+      <td class="center mono">${pfpj > 0 ? pfpj.toFixed(1) : '—'}</td>
+      <td class="center mono">${pcpj > 0 ? pcpj.toFixed(1) : '—'}</td>
+    `;
+    return tr;
+  }
+
+  function renderTable(tbodyId, rows) {
+    const tbody = document.getElementById(tbodyId);
+    tbody.innerHTML = '';
+    rows.forEach((row, i) => {
+      const tr = buildRow(row);
+      tr.querySelector('.col-rank').textContent = String(i + 1);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── Sort state ───────────────────────────────────────────────────────────────
+
+  const sortState = {
+    div1: { col: 'pct', asc: false },
+    div2: { col: 'pct', asc: false },
+  };
+
+  function sortRows(rows, col, asc) {
+    return [...rows].sort((a, b) => {
+      let va = a.dataset[col] ?? '';
+      let vb = b.dataset[col] ?? '';
+      const isNum = !isNaN(parseFloat(va));
+      if (isNum) { va = parseFloat(va); vb = parseFloat(vb); }
+      if (va < vb) return asc ? -1 : 1;
+      if (va > vb) return asc ? 1 : -1;
+      return 0;
+    });
+  }
+
+  function applySort(tableId, stateKey) {
+    const tbody = document.getElementById(tableId + '-body');
+    const { col, asc } = sortState[stateKey];
+    const sorted = sortRows([...tbody.querySelectorAll('tr')], col, asc);
+    sorted.forEach((tr, i) => {
+      tr.querySelector('.col-rank').textContent = String(i + 1);
+      tbody.appendChild(tr);
+    });
+    // update DIF color
+    tbody.querySelectorAll('tr').forEach((tr) => {
+      const dif = parseFloat(tr.dataset.dif ?? '0');
+      const difTd = tr.querySelectorAll('td')[9];
+      difTd.className = `center mono ${dif > 0 ? 'pos' : dif < 0 ? 'neg' : ''}`;
+      difTd.textContent = (dif > 0 ? '+' : '') + dif;
+    });
+  }
+
+  function wireSort(tableId, stateKey) {
+    const table = document.getElementById(tableId);
+    const headers = table.querySelectorAll('th.sortable-col');
+    headers.forEach((th) => {
+      th.addEventListener('click', () => {
+        const col = th.dataset.col;
+        const { col: curCol, asc: curAsc } = sortState[stateKey];
+        const goAsc = col === curCol ? !curAsc : false;
+        sortState[stateKey] = { col, asc: goAsc };
+        headers.forEach((h) => h.classList.remove('active', 'asc', 'desc'));
+        th.classList.add('active', goAsc ? 'asc' : 'desc');
+        applySort(tableId, stateKey);
+      });
+    });
+  }
+
+  // ── Main refresh ─────────────────────────────────────────────────────────────
+
+  function refresh() {
+    const desde = parseInt(selDesde.value, 10);
+    const hasta = parseInt(selHasta.value, 10);
+
+    const rows1 = calcAllTime(seasonPayload, 1, desde, hasta);
+    const rows2 = calcAllTime(seasonPayload, 2, desde, hasta);
+
+    renderTable('div1-body', rows1);
+    renderTable('div2-body', rows2);
+
+    // Re-apply active sort after render
+    applySort('div1', 'div1');
+    applySort('div2', 'div2');
+
+    // Restore active header highlight
+    ['div1', 'div2'].forEach((id) => {
+      const stateKey = id;
+      const { col, asc } = sortState[stateKey];
+      const table = document.getElementById(id);
+      table.querySelectorAll('th.sortable-col').forEach((th) => {
+        if (th.dataset.col === col) {
+          th.classList.add('active', asc ? 'asc' : 'desc');
+        }
+      });
+    });
+
+    const total = desde === minYear && hasta === maxYear ? 'todo el historial' : `${desde}–${hasta}`;
+    document.getElementById('filter-note').textContent = `Mostrando ${total}`;
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────────────────
+
+  const selDesde = document.getElementById('sel-desde');
+  const selHasta = document.getElementById('sel-hasta');
+
+  availableYears.forEach((y) => {
+    const o1 = document.createElement('option');
+    o1.value = o1.textContent = y;
+    if (y === minYear) o1.selected = true;
+    selDesde.appendChild(o1);
+
+    const o2 = document.createElement('option');
+    o2.value = o2.textContent = y;
+    if (y === maxYear) o2.selected = true;
+    selHasta.appendChild(o2);
+  });
+
+  selDesde.addEventListener('change', () => {
+    if (parseInt(selDesde.value) > parseInt(selHasta.value))
+      selHasta.value = selDesde.value;
+    refresh();
+  });
+
+  selHasta.addEventListener('change', () => {
+    if (parseInt(selHasta.value) < parseInt(selDesde.value))
+      selDesde.value = selHasta.value;
+    refresh();
+  });
+
+  wireSort('div1', 'div1');
+  wireSort('div2', 'div2');
+
+  refresh();
+</script>

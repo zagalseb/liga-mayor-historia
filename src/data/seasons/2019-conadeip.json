@@ -1,0 +1,63 @@
+{
+  "season": 2019,
+  "liga": "CONADEIP",
+  "conferencia": "CONADEIP 2019",
+  "division": 1,
+  "divisiones": {
+    "1": {
+      "conferencia": "Independencia",
+      "equipos": ["borregos_mty", "borregos_gdl", "borregos_pue", "aztecas_udlap", "borregos_tol", "borregos_mex"]
+    },
+    "2": {
+      "conferencia": "Libertad",
+      "equipos": ["zorros_cetys", "borregos_qro", "potros_itson", "cimarrones_uabc"]
+    }
+  },
+  "games": [
+    { "id": "2019-con-001", "home_team_id": "borregos_gdl", "away_team_id": "borregos_mex", "home_score": 28, "away_score": 31, "jornada": 1, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-002", "home_team_id": "borregos_tol", "away_team_id": "aztecas_udlap", "home_score": 24, "away_score": 35, "jornada": 1, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-003", "home_team_id": "borregos_pue", "away_team_id": "borregos_mty", "home_score": 7, "away_score": 27,"jornada": 1, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-004", "home_team_id": "borregos_mty", "away_team_id": "borregos_tol", "home_score": 38, "away_score": 3, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-005", "home_team_id": "cimarrones_uabc", "away_team_id": "zorros_cetys", "home_score": 19, "away_score": 21, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-006", "home_team_id": "potros_itson", "away_team_id": "borregos_qro", "home_score": 31, "away_score": 21, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-007", "home_team_id": "borregos_gdl", "away_team_id": "borregos_pue", "home_score": 6, "away_score": 38, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-008", "home_team_id": "aztecas_udlap", "away_team_id": "borregos_mex", "home_score": 21, "away_score": 7, "jornada": 2, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-009", "home_team_id": "potros_itson", "away_team_id": "cimarrones_uabc", "home_score": 42, "away_score": 35, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-010", "home_team_id": "zorros_cetys", "away_team_id": "borregos_qro", "home_score": 21, "away_score": 14, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-011", "home_team_id": "borregos_pue", "away_team_id": "aztecas_udlap", "home_score": 24, "away_score": 26, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-012", "home_team_id": "borregos_mex", "away_team_id": "borregos_tol", "home_score": 16, "away_score": 35, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-013", "home_team_id": "borregos_mty", "away_team_id": "borregos_gdl", "home_score": 37, "away_score": 14, "jornada": 3, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-014", "home_team_id": "borregos_qro", "away_team_id": "cimarrones_uabc", "home_score": 41, "away_score": 33, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-015", "home_team_id": "zorros_cetys", "away_team_id": "potros_itson", "home_score": 7, "away_score": 13, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-016", "home_team_id": "borregos_tol", "away_team_id": "borregos_gdl", "home_score": 42, "away_score": 13, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-017", "home_team_id": "aztecas_udlap", "away_team_id": "borregos_mty", "home_score": 17, "away_score": 10, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-018", "home_team_id": "borregos_pue", "away_team_id": "borregos_mex", "home_score": 27, "away_score": 10, "jornada": 4, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-019", "home_team_id": "borregos_qro", "away_team_id": "zorros_cetys", "home_score": 34, "away_score": 28, "jornada": 5, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-020", "home_team_id": "borregos_gdl", "away_team_id": "aztecas_udlap", "home_score": 27, "away_score": 52, "jornada": 5, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-021", "home_team_id": "borregos_pue", "away_team_id": "borregos_tol", "home_score": 34, "away_score": 20, "jornada": 5, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-022", "home_team_id": "borregos_mty", "away_team_id": "borregos_mex", "home_score": 35, "away_score": 19, "jornada": 5, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-023", "home_team_id": "zorros_cetys", "away_team_id": "cimarrones_uabc", "home_score": 33, "away_score": 32, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-024", "home_team_id": "borregos_qro", "away_team_id": "potros_itson", "home_score": 27, "away_score": 26, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-025", "home_team_id": "borregos_tol", "away_team_id": "borregos_mty", "home_score": 13, "away_score": 16, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-026", "home_team_id": "aztecas_udlap", "away_team_id": "borregos_pue", "home_score": 24, "away_score": 31, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-027", "home_team_id": "borregos_mex", "away_team_id": "borregos_gdl", "home_score": 36, "away_score": 26, "jornada": 6, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-028", "home_team_id": "potros_itson", "away_team_id": "zorros_cetys", "home_score": 28, "away_score": 17, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-029", "home_team_id": "cimarrones_uabc", "away_team_id": "borregos_qro", "home_score": 6, "away_score": 7, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-030", "home_team_id": "borregos_gdl", "away_team_id": "borregos_tol", "home_score": 14, "away_score": 31, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-031", "home_team_id": "borregos_mex", "away_team_id": "aztecas_udlap", "home_score": 24, "away_score": 39, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-032", "home_team_id": "borregos_mty", "away_team_id": "borregos_pue", "home_score": 17, "away_score": 3, "jornada": 7, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-033", "home_team_id": "potros_itson", "away_team_id": "borregos_gdl", "home_score": 27, "away_score": 34, "jornada": 8, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-034", "home_team_id": "borregos_mex", "away_team_id": "borregos_mty", "home_score": 16, "away_score": 40, "jornada": 8, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-035", "home_team_id": "aztecas_udlap", "away_team_id": "borregos_tol", "home_score": 38, "away_score": 31, "jornada": 8, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-036", "home_team_id": "cimarrones_uabc", "away_team_id": "borregos_pue", "home_score": 6, "away_score": 35, "jornada": 8, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-037", "home_team_id": "cimarrones_uabc", "away_team_id": "potros_itson", "home_score": 14, "away_score": 35, "jornada": 9, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-038", "home_team_id": "borregos_pue", "away_team_id": "zorros_cetys", "home_score": 65, "away_score": 7, "jornada": 9, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-039", "home_team_id": "borregos_gdl", "away_team_id": "borregos_qro", "home_score": 48, "away_score": 0, "jornada": 9, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-040", "home_team_id": "borregos_mty", "away_team_id": "aztecas_udlap", "home_score": 28, "away_score": 22, "jornada": 10, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-041", "home_team_id": "borregos_tol", "away_team_id": "borregos_mex", "home_score": 21, "away_score": 17, "jornada": 10, "tipo": "regular", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-042", "home_team_id": "borregos_mty", "away_team_id": "borregos_tol", "home_score": 42, "away_score": 15, "jornada": null, "tipo": "playoffs_semi", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-043", "home_team_id": "aztecas_udlap", "away_team_id": "borregos_pue", "home_score": 28, "away_score": 9, "jornada": null, "tipo": "playoffs_semi", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-044", "home_team_id": "potros_itson", "away_team_id": "borregos_qro", "home_score": 34, "away_score": 33, "jornada": null, "tipo": "final_libertad", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true },
+    { "id": "2019-con-045", "home_team_id": "borregos_mty", "away_team_id": "aztecas_udlap", "home_score": 27, "away_score": 13, "jornada": null, "tipo": "final_independencia", "fecha": null, "lugar": null, "neutral": false, "cuenta_standing": true }
+  ]
+}

@@ -1,14 +1,21 @@
 import type { GameRecord } from './standings';
 export type { GameRecord };
 
+export interface DivisionInfo {
+  conferencia: string;
+  equipos: string[];
+}
+
 interface RawSeasonFile {
   season: number;
   liga: string;
   conferencia: string;
   division: number;
-  grupo: string | null;
+  grupo?: string | null;
   grupos?: Record<string, string[]>;
+  divisiones?: Record<string, DivisionInfo>;
   clasificados_playoffs?: string[];
+  descenso?: string[];
   games: GameRecord[];
 }
 
@@ -19,7 +26,9 @@ export interface SeasonData {
   division: number;
   grupo: string | null;
   grupos?: Record<string, string[]>;
+  divisiones?: Record<string, DivisionInfo>;
   clasificados_playoffs?: string[];
+  descenso?: string[];
   games: GameRecord[];
 }
 
@@ -34,9 +43,11 @@ export const allSeasons: SeasonData[] = Object.values(modules)
     liga: raw.liga,
     conferencia: raw.conferencia,
     division: raw.division,
-    grupo: raw.grupo,
+    grupo: raw.grupo ?? null,
     grupos: raw.grupos,
+    divisiones: raw.divisiones,
     clasificados_playoffs: raw.clasificados_playoffs,
+    descenso: raw.descenso,
     games: raw.games,
   }))
   .sort((a, b) => b.year - a.year);

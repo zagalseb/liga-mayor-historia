@@ -1,0 +1,18 @@
+{
+  "games": [
+    {
+      "id": "2019-clasico-regio",
+      "fecha": "2019-08-30",
+      "tipo": "exhibicion",
+      "subtipo": "Clásico Regio",
+      "home_team_id": "borregos_mty",
+      "away_team_id": "autenticos_uanl",
+      "home_score": 49,
+      "away_score": 16,
+      "lugar": "Estadio Borregos",
+      "neutral": false,
+      "cuenta_standing": false,
+      "nota": "Clásico Regio Estudiantil 2019 — partido interliga entre CONADEIP y ONEFA"
+    }
+  ]
+}

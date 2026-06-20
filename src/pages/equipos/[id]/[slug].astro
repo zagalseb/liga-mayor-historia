@@ -4,6 +4,7 @@ import teams from '../../../data/teams.json';
 import { calcStandings } from '../../../utils/standings';
 import { allSeasons, seasonSlug } from '../../../utils/seasons';
 import type { SeasonData } from '../../../utils/seasons';
+import specialGamesData from '../../../data/special-games.json';
 const B = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const withBase = (path: string) => B + (path.startsWith('/') ? path.slice(1) : path);
 
@@ -31,7 +32,7 @@ interface Props {
 }
 const { team, season } = Astro.props;
 const id = team.id;
-const { year, conferencia, games: seasonGames } = season;
+const { year, liga, conferencia, games: seasonGames } = season;
 
 const standing = calcStandings(seasonGames).find((s) => s.team_id === id);
 
@@ -41,7 +42,7 @@ const myGames = (tipos: string[]) =>
     .sort((a, b) => (a.jornada ?? 99) - (b.jornada ?? 99) || (a.fecha ?? '').localeCompare(b.fecha ?? ''));
 
 const regularGames = myGames(['regular']);
-const playoffs = myGames(['playoffs_cuartos', 'playoffs_semi', 'final']);
+const playoffs = myGames(['playoffs_cuartos', 'playoffs_semi', 'final', 'final_independencia', 'final_libertad', 'final_revolucion_independencia', 'final_centro', 'final_norte']);
 
 const slug = seasonSlug(season);
 
@@ -59,18 +60,64 @@ const tipoLabel: Record<string, string> = {
   playoffs_cuartos: 'Cuartos',
   playoffs_semi: 'Semifinal',
   final: 'Final',
+  final_independencia: 'Final',
+  final_libertad: 'Final',
+  final_revolucion_independencia: 'Final',
+  final_centro: 'Final',
 };
 
 const fmtPct = (n: number) => n.toFixed(3).replace('0.', '.');
 
-const finalGame = seasonGames.find((g) => g.tipo === 'final');
+const specialGames = specialGamesData.games.filter((g) => {
+  if (g.home_team_id !== id && g.away_team_id !== id) return false;
+  const gameYear = g.fecha ? parseInt(g.fecha.slice(0, 4), 10) : null;
+  return gameYear === year;
+});
+
+const spTeamName = (tid: string) =>
+  teams.find((t) => t.id === tid)?.nombre_corto ?? tid;
+
+// Resolve effective division and conferencia for THIS team in this season
+let teamDivision = season.division;
+let teamConferencia = conferencia;
+if (season.divisiones) {
+  for (const [divKey, divInfo] of Object.entries(season.divisiones)) {
+    if (divInfo.equipos.includes(id)) {
+      teamDivision = parseInt(divKey, 10);
+      teamConferencia = divInfo.conferencia;
+      break;
+    }
+  }
+}
+
+// Season label: use liga for div-1 teams in 2008-2019 range
+const seasonLabel = teamDivision === 1 && year >= 2008 && year <= 2019
+  ? `${liga} ${year}`
+  : `${teamConferencia} ${year}`;
+
+const championLabel = `Campeón ${seasonLabel}`;
+
+const finalTypes = new Set(['final', 'final_independencia', 'final_libertad', 'final_revolucion_independencia', 'final_centro', 'final_norte']);
+const finalGame = seasonGames.find(
+  (g) => finalTypes.has(g.tipo) &&
+    (g.home_team_id === id || g.away_team_id === id)
+);
 const isChampion = finalGame
   ? (finalGame.home_team_id === id && finalGame.home_score > finalGame.away_score) ||
     (finalGame.away_team_id === id && finalGame.away_score > finalGame.home_score)
   : false;
+
+// For final_centro, override the champion label to use "Centro" as the group name
+const championLabelOverride =
+  finalGame?.tipo === 'final_norte' || finalGame?.tipo === 'final_revolucion_independencia'
+    ? `Campeón ${teamConferencia} - Norte ${year}`
+    : finalGame?.tipo === 'final_centro'
+    ? `Campeón ${teamConferencia} - Centro ${year}`
+    : null;
+const effectiveChampionLabel = championLabelOverride ?? championLabel;
 ---
 
-<Base title={`${team.nombre_corto} ${conferencia} ${year}`}>
+<Base title={`${team.nombre_corto} ${seasonLabel}`}>
   <p style="margin-bottom: 0.5rem;">
     <a href={`${B}equipos`}>← Equipos</a>
     {' / '}
@@ -84,7 +131,7 @@ const isChampion = finalGame
       </div>
     )}
     <div>
-      <h1>{team.nombre_oficial} <span class="year-badge">{conferencia} {year}</span></h1>
+      <h1>{team.nombre_oficial} <span class="year-badge">{seasonLabel}</span></h1>
       <dl class="meta">
         <dt>Universidad</dt><dd>{team.universidad}</dd>
         <dt>Ciudad</dt><dd>{team.ciudad}, {team.estado}</dd>
@@ -94,7 +141,7 @@ const isChampion = finalGame
 
   {isChampion && (
     <div class="champion-banner">
-      🏆 Campeón {conferencia} {year}
+      🏆 {effectiveChampionLabel}
     </div>
   )}
 
@@ -187,6 +234,47 @@ const isChampion = finalGame
       </div>
     )}
   </section>
+
+  {specialGames.length > 0 && (
+    <section>
+      <h2>Partidos especiales {year}</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="left">Fecha</th>
+              <th class="left">Tipo</th>
+              <th class="left">Local</th>
+              <th>Marcador</th>
+              <th class="left">Visita</th>
+              <th class="left">Lugar</th>
+              <th class="left">Nota</th>
+            </tr>
+          </thead>
+          <tbody>
+            {specialGames.map((g) => {
+              const homeIsMe = g.home_team_id === id;
+              const myPts = homeIsMe ? g.home_score : g.away_score;
+              const theirPts = homeIsMe ? g.away_score : g.home_score;
+              const win = myPts > theirPts;
+              return (
+                <tr>
+                  <td class="nowrap">{g.fecha ?? '—'}</td>
+                  <td class="lugar">{g.subtipo ?? g.tipo}</td>
+                  <td>{spTeamName(g.home_team_id)}</td>
+                  <td class={`center mono fw ${win ? 'green' : 'red'}`}>{g.home_score}–{g.away_score}</td>
+                  <td>{spTeamName(g.away_team_id)}</td>
+                  <td class="lugar">{g.lugar}</td>
+                  <td class="lugar nota">{g.nota ?? ''}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="font-size:0.75rem; margin-top:0.4rem;">Partidos fuera de temporada — no cuentan para el récord.</p>
+    </section>
+  )}
 </Base>
 
 <style>
@@ -234,6 +322,8 @@ const isChampion = finalGame
   .green { color: #1a7a1a; }
   .red { color: #a00; }
   .lugar { color: #666; font-size: 0.8rem; }
+  .nowrap { white-space: nowrap; }
+  .nota { max-width: 260px; }
   a { color: inherit; text-decoration: none; }
   a:hover { text-decoration: underline; }
   .muted { color: #888; font-size: 0.9rem; }
